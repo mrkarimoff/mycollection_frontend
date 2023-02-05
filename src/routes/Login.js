@@ -6,18 +6,19 @@ import { Link, useNavigate } from "react-router-dom";
 import config from "../config.json";
 import { ToastContainer, toast } from "react-toastify";
 import { useSelector } from "react-redux";
-import { getTheme } from "../redux/users/users.selectors";
+import { getTheme, getLanguage } from "../redux/users/users.selectors";
 import MainHeader from "../components/MainHeader";
 
 const Login = () => {
   const navigate = useNavigate();
   const { defaultAlgorithm, darkAlgorithm } = theme;
   const siteTheme = useSelector(getTheme());
+  const uiLanguage = useSelector(getLanguage());
   const { Title } = Typography;
   const validateMessages = {
-    required: " ${name} is required!",
+    required: uiLanguage?.loginPage?.validateMessages?.required,
     pattern: {
-      mismatch: "${name} is invalid ",
+      mismatch: uiLanguage?.loginPage?.validateMessages?.invalid,
     },
   };
   // {withCredentials: true}
@@ -51,7 +52,7 @@ const Login = () => {
         />
         <div className="main">
           <div className="main-cont">
-            <Title level={2}>Sign in to your account</Title>
+            <Title level={2}>{uiLanguage?.loginPage?.title}</Title>
             <Title
               style={{
                 textAlign: "center",
@@ -60,7 +61,8 @@ const Login = () => {
                 marginTop: 0,
               }}
             >
-              Don't have an account? <Link to={"/register"}>Sign Up</Link>
+              {uiLanguage?.loginPage?.question}{" "}
+              <Link to={"/register"}>{uiLanguage?.loginPage?.link}</Link>
             </Title>
 
             <Card
@@ -80,8 +82,8 @@ const Login = () => {
                 autoComplete="off"
               >
                 <Form.Item
-                  label="Email"
-                  name="email"
+                  label={uiLanguage?.loginPage?.email?.label}
+                  name={uiLanguage?.loginPage?.email?.label}
                   rules={[
                     {
                       required: true,
@@ -90,12 +92,16 @@ const Login = () => {
                     },
                   ]}
                 >
-                  <Input type="email" size="large" placeholder="Enter your email" />
+                  <Input
+                    type="email"
+                    size="large"
+                    placeholder={uiLanguage?.loginPage?.email?.placeholder}
+                  />
                 </Form.Item>
 
                 <Form.Item
-                  label="Password"
-                  name="password"
+                  label={uiLanguage?.loginPage?.password?.label}
+                  name={uiLanguage?.loginPage?.password?.label}
                   rules={[
                     {
                       required: true,
@@ -105,14 +111,14 @@ const Login = () => {
                   <Input.Password
                     type="password"
                     size="large"
-                    placeholder="Enter your password"
+                    placeholder={uiLanguage?.loginPage?.password?.placeholder}
                     iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
                   />
                 </Form.Item>
 
                 <Form.Item style={{ marginTop: "30px" }}>
                   <Button size="large" style={{ width: "100%" }} type="primary" htmlType="submit">
-                    Sign in
+                    {uiLanguage?.loginPage?.btn}
                   </Button>
                 </Form.Item>
               </Form>

@@ -1,15 +1,20 @@
-import { Button, Col, Dropdown } from "antd";
+import { Button, Col, Dropdown, Select } from "antd";
 import Search from "antd/es/input/Search";
 import { Header } from "antd/es/layout/layout";
 import { useDispatch, useSelector } from "react-redux";
-import { toggleTheme } from "../redux/users/users.reducer";
-import { getTheme } from "../redux/users/users.selectors";
+import { Link, useNavigate } from "react-router-dom";
+import config from "../config.json";
+import { changeLanguage, setDefaultLang, toggleTheme } from "../redux/users/users.reducer";
+import { getDefaultLang, getLanguage, getTheme } from "../redux/users/users.selectors";
 
 const MainHeader = () => {
   const dispatch = useDispatch();
   const siteTheme = useSelector(getTheme());
+  const uiLanguage = useSelector(getLanguage());
+  const defaultLang = useSelector(getDefaultLang());
   const pathName = window.location.pathname;
   const generalPages = ["/login", "/register"];
+  const navigate = useNavigate();
   const style = {
     color: "#fff",
     display: "flex",
@@ -23,13 +28,22 @@ const MainHeader = () => {
   const items = [
     {
       key: "1",
-      label: <Button type="ghost">My collections</Button>,
+      label: (
+        <Button onClick={() => navigate("/login")} type="ghost">
+          {uiLanguage?.mainPage?.loginBtn}
+        </Button>
+      ),
     },
     {
       key: "2",
-      label: <Button type="ghost">Log out</Button>,
+      label: <Button type="ghost">{uiLanguage?.mainPage?.logoutBtn}</Button>,
     },
   ];
+
+  const handleLanguage = (val) => {
+    dispatch(changeLanguage(config.UILanguage[val]));
+    dispatch(setDefaultLang(val));
+  };
 
   return (
     <Header
@@ -43,26 +57,47 @@ const MainHeader = () => {
       }}
     >
       <Col style={style} span={24}>
-        <h2 id="logo">
-          <span style={{ color: "red", fontStyle: "italic" }}>M</span>y
-          <span style={{ color: "red", fontStyle: "italic" }}>C</span>
-          ollections
-        </h2>
-        <h2 id="logoMobile">
-          <span style={{ color: "red", fontStyle: "italic" }}>M</span>
-          <span style={{ color: "red", fontStyle: "italic" }}>C</span>
-        </h2>
+        <Link id="logo" to={"/"}>
+          <h2>
+            <span style={{ color: "red", fontStyle: "italic" }}>M</span>y
+            <span style={{ color: "red", fontStyle: "italic" }}>C</span>
+            ollections
+          </h2>
+        </Link>
+        <Link id="logoMobile" to={"/"}>
+          <h2>
+            <span style={{ color: "red", fontStyle: "italic" }}>M</span>
+            <span style={{ color: "red", fontStyle: "italic" }}>C</span>
+          </h2>
+        </Link>
 
         <div id="searchBar" style={{ display: generalPages.includes(pathName) && "none" }}>
           <Search
             size="large"
-            placeholder="Search through site"
+            placeholder={uiLanguage?.mainPage?.searchPlaceholder}
             onSearch={() => console.log("hello")}
             enterButton
           />
         </div>
 
         <div id="account">
+          <Select
+            style={{
+              width: 70,
+            }}
+            defaultValue={defaultLang}
+            onChange={handleLanguage}
+            options={[
+              {
+                value: "eng",
+                label: "Eng",
+              },
+              {
+                value: "rus",
+                label: "Ру",
+              },
+            ]}
+          />
           <Button
             style={{
               display: "flex",
@@ -84,7 +119,7 @@ const MainHeader = () => {
             arrow
           >
             <Button style={{ display: generalPages.includes(pathName) && "none" }} size="large">
-              Account
+              {uiLanguage?.mainPage?.myAccountBtn}
             </Button>
           </Dropdown>
         </div>

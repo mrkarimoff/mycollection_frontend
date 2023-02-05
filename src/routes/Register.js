@@ -7,18 +7,19 @@ import { ToastContainer, toast } from "react-toastify";
 import config from "../config.json";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { getTheme } from "../redux/users/users.selectors";
+import { getLanguage, getTheme } from "../redux/users/users.selectors";
 import MainHeader from "../components/MainHeader";
 
 const Register = () => {
   const navigate = useNavigate();
   const { defaultAlgorithm, darkAlgorithm } = theme;
   const isDarkTheme = useSelector(getTheme());
+  const uiLanguage = useSelector(getLanguage());
   const { Title } = Typography;
   const validateMessages = {
-    required: " ${name} is required!",
+    required: uiLanguage?.registerPage?.validateMessages?.required,
     pattern: {
-      mismatch: "${name} is invalid ",
+      mismatch: uiLanguage?.registerPage?.validateMessages?.invalid,
     },
   };
 
@@ -51,7 +52,7 @@ const Register = () => {
         />
         <div className="main signup">
           <div className="main-cont">
-            <Title level={2}>Create account</Title>
+            <Title level={2}>{uiLanguage?.registerPage?.title}</Title>
             <Title
               style={{
                 textAlign: "center",
@@ -60,7 +61,8 @@ const Register = () => {
                 marginTop: 0,
               }}
             >
-              Already have an account? <Link to={"/login"}>Sign In</Link>
+              {uiLanguage?.registerPage?.question}{" "}
+              <Link to={"/login"}>{uiLanguage?.registerPage?.link}</Link>
             </Title>
 
             <Card
@@ -77,8 +79,8 @@ const Register = () => {
                 autoComplete="off"
               >
                 <Form.Item
-                  label="Username"
-                  name="username"
+                  label={uiLanguage?.registerPage?.username?.label}
+                  name={uiLanguage?.registerPage?.username?.label}
                   rules={[
                     {
                       required: true,
@@ -87,14 +89,14 @@ const Register = () => {
                 >
                   <Input
                     size="large"
-                    placeholder="Enter your username"
+                    placeholder={uiLanguage?.registerPage?.username?.placeholder}
                     prefix={<UserOutlined className="site-form-item-icon" />}
                   />
                 </Form.Item>
 
                 <Form.Item
-                  label="Email"
-                  name="email"
+                  label={uiLanguage?.registerPage?.email?.label}
+                  name={uiLanguage?.registerPage?.email?.label}
                   rules={[
                     {
                       required: true,
@@ -103,12 +105,16 @@ const Register = () => {
                     },
                   ]}
                 >
-                  <Input type="email" size="large" placeholder="Enter your email" />
+                  <Input
+                    type="email"
+                    size="large"
+                    placeholder={uiLanguage?.registerPage?.email?.placeholder}
+                  />
                 </Form.Item>
 
                 <Form.Item
-                  label="Password"
-                  name="password"
+                  label={uiLanguage?.registerPage?.password?.label}
+                  name={uiLanguage?.registerPage?.password?.label}
                   rules={[
                     {
                       required: true,
@@ -118,14 +124,14 @@ const Register = () => {
                   <Input.Password
                     size="large"
                     type="password"
-                    placeholder="Enter your password"
+                    placeholder={uiLanguage?.registerPage?.password?.placeholder}
                     iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
                   />
                 </Form.Item>
 
                 <Form.Item
-                  label="Confirm Password"
-                  name="Confirm_Password"
+                  label={uiLanguage?.registerPage?.confirmPassword?.label}
+                  name={uiLanguage?.registerPage?.confirmPassword?.label}
                   rules={[
                     {
                       required: true,
@@ -135,7 +141,9 @@ const Register = () => {
                         if (!value || getFieldValue("password") === value) {
                           return Promise.resolve();
                         }
-                        return Promise.reject(new Error("Passwords do not match"));
+                        return Promise.reject(
+                          new Error(uiLanguage?.registerPage?.confirmPassword?.noMatchMessage)
+                        );
                       },
                     }),
                   ]}
@@ -143,14 +151,14 @@ const Register = () => {
                   <Input.Password
                     type="password"
                     size="large"
-                    placeholder="Enter your password"
+                    placeholder={uiLanguage?.registerPage?.confirmPassword?.placeholder}
                     iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
                   />
                 </Form.Item>
 
                 <Form.Item style={{ marginTop: "30px" }}>
                   <Button size="large" style={{ width: "100%" }} type="primary" htmlType="submit">
-                    Sign up
+                    {uiLanguage?.registerPage?.btn}
                   </Button>
                 </Form.Item>
               </Form>
