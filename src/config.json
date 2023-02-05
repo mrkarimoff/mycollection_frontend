@@ -1,3 +1,119 @@
 {
-  "baseUrl": "http://localhost:4000"
+  "baseUrl": "http://localhost:4000",
+  "UILanguage": {
+    "eng": {
+      "mainPage": {
+        "searchPlaceholder": "Search through site",
+        "accountBtn": "Account",
+        "loginBtn": "Log in",
+        "myAccountBtn": "Account",
+        "logoutBtn": "Log out",
+        "section1": "Popular Tags",
+        "section2": "Biggest Collections",
+        "section3": "Recent Items"
+      },
+      "loginPage": {
+        "title": "Log in to your account",
+        "question": "Don't have an account?",
+        "link": "Register",
+        "validateMessages": {
+          "required": "${name} is required!",
+          "invalid": "${name} is invalid!"
+        },
+        "email": {
+          "label": "Email",
+          "placeholder": "Enter your email"
+        },
+        "password": {
+          "label": "Password",
+          "placeholder": "Enter your password"
+        },
+        "btn": "Log in"
+      },
+      "registerPage": {
+        "title": "Create account",
+        "question": "Already have an account?",
+        "link": "Log in",
+        "validateMessages": {
+          "required": "${name} is required!",
+          "invalid": "${name} is invalid!"
+        },
+        "username": {
+          "label": "Username",
+          "placeholder": "Enter your username"
+        },
+        "email": {
+          "label": "Email",
+          "placeholder": "Enter your email"
+        },
+        "password": {
+          "label": "Password",
+          "placeholder": "Enter your password"
+        },
+        "confirmPassword": {
+          "label": "Confirm Password",
+          "placeholder": "Repeat your password",
+          "noMatchMessage": "Passwords do not match"
+        },
+        "btn": "Register"
+      }
+    },
+    "rus": {
+      "mainPage": {
+        "searchPlaceholder": "Поиск по сайту",
+        "accountBtn": "Профиль",
+        "loginBtn": "Логин",
+        "myAccountBtn": "Профиль",
+        "logoutBtn": "Выйти",
+        "section1": "Популярные Теги",
+        "section2": "Самые большие коллекции",
+        "section3": "Последние Предметы"
+      },
+      "loginPage": {
+        "title": "Войдите в свой аккаунт",
+        "question": "У вас нет аккаунта?",
+        "link": "Регистрировать",
+        "validateMessages": {
+          "required": "${name} обязательно!",
+          "invalid": "${name} недействительно!"
+        },
+        "email": {
+          "label": "Электронная почта",
+          "placeholder": "Введите адрес электронной почты"
+        },
+        "password": {
+          "label": "Пароль",
+          "placeholder": "Введите ваш пароль"
+        },
+        "btn": "Авторизовать"
+      },
+      "registerPage": {
+        "title": "Зарегистрироваться",
+        "question": "У вас уже есть аккаунт?",
+        "link": "Авторизовать",
+        "validateMessages": {
+          "required": "${name} обязательно!",
+          "invalid": "${name} недействительно!"
+        },
+        "username": {
+          "label": "Имя пользователя",
+          "placeholder": "Введите имя пользователя"
+        },
+        "email": {
+          "label": "Электронная почта",
+          "placeholder": "Введите адрес электронной почты"
+        },
+        "password": {
+          "label": "Пароль",
+          "placeholder": "Введите ваш пароль"
+        },
+        "confirmPassword": {
+          "label": "Подтвердите пароль",
+          "placeholder": "Повторите свой пароль",
+          "noMatchMessage": "Пароли не совпадают"
+        },
+        "btn": "Регистрировать"
+      }
+    }
+  }
 }
