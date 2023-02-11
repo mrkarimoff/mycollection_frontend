@@ -29,8 +29,8 @@ const MainHeader = () => {
     {
       key: "1",
       label: (
-        <Button onClick={() => navigate("/login")} type="ghost">
-          {uiLanguage?.mainPage?.loginBtn}
+        <Button onClick={() => navigate("/username")} type="ghost">
+          {uiLanguage?.mainPage?.myCollectionsBtn}
         </Button>
       ),
     },
@@ -52,7 +52,7 @@ const MainHeader = () => {
         color: "fff",
         position: "sticky",
         top: 0,
-        zIndex: 1,
+        zIndex: 999,
         width: "100%",
       }}
     >
@@ -111,6 +111,9 @@ const MainHeader = () => {
           >
             <img width={"30px"} src={`/${siteTheme ? "moon" : "sun"}.png`} alt="themeIcon" />
           </Button>
+          {/* <Button size="large" onClick={() => navigate("/login")}>
+            {uiLanguage?.mainPage?.loginBtn}
+          </Button> */}
           <Dropdown
             menu={{
               items,

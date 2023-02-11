@@ -2,10 +2,16 @@
   "baseUrl": "http://localhost:4000",
   "UILanguage": {
     "eng": {
+      "validateMessages": {
+        "required": "${name} is required!",
+        "invalid": "${name} is invalid!",
+        "min": "${name} must be at least ${min} characters"
+      },
       "mainPage": {
         "searchPlaceholder": "Search through site",
         "accountBtn": "Account",
         "loginBtn": "Log in",
+        "myCollectionsBtn": "My collections",
         "myAccountBtn": "Account",
         "logoutBtn": "Log out",
         "section1": "Popular Tags",
@@ -16,10 +22,6 @@
         "title": "Log in to your account",
         "question": "Don't have an account?",
         "link": "Register",
-        "validateMessages": {
-          "required": "${name} is required!",
-          "invalid": "${name} is invalid!"
-        },
         "email": {
           "label": "Email",
           "placeholder": "Enter your email"
@@ -34,10 +36,6 @@
         "title": "Create account",
         "question": "Already have an account?",
         "link": "Log in",
-        "validateMessages": {
-          "required": "${name} is required!",
-          "invalid": "${name} is invalid!"
-        },
         "username": {
           "label": "Username",
           "placeholder": "Enter your username"
@@ -56,13 +54,82 @@
           "noMatchMessage": "Passwords do not match"
         },
         "btn": "Register"
+      },
+      "collectionPage": {
+        "title": "Items Table",
+        "addItemBtn": "Add Item",
+        "tableElements": {
+          "name": "Name",
+          "tags": "Tags",
+          "links": "Links",
+          "actions": "Actions",
+          "delBtn": "delete",
+          "edBtn": "edit",
+          "more": "More"
+        },
+        "formElements": {
+          "modalTitle": "Add Item",
+          "name": {
+            "label": "Name",
+            "placeholder": "Enter item name"
+          },
+          "tags": {
+            "label": "Tags",
+            "placeholder": "Enter item tags"
+          },
+          "submitBtn": "Submit"
+        }
+      },
+      "userAccount": {
+        "title": "My Collections",
+        "addCollectionBtn": "Add Collection",
+        "submitBtn": "Submit",
+        "formElements": {
+          "submitSuccessMsg": "Submit success!",
+          "submitFailsMsg": "Submit failed!",
+          "modalTitle": "Add Collection",
+          "collectionImg": {
+            "label": "Collection Image",
+            "placeholder": "Upload or Drag and Drop"
+          },
+          "collectionName": {
+            "label": "Name",
+            "placeholder": "Enter collection name"
+          },
+          "topic": {
+            "label": "Topic",
+            "placeholder": "Select collection topic",
+            "topics": "eng"
+          },
+          "textareaMarkdown": {
+            "label": "Description",
+            "placeholder": "Write a short description of your collection (markdown supported)",
+            "tab1": "Write",
+            "tab2": "Preview"
+          },
+          "customFields": {
+            "inpPlaceholder": "Field name",
+            "selectTypePlaceholder": "Select field type",
+            "limitFieldMessage": "You can't add more than 15 fields",
+            "addFieldBtn": "Add custom field",
+            "fieldInvalidMessage": "Field name and type required!",
+            "fieldTypes": "eng"
+          }
+        }
       }
     },
+
     "rus": {
+      "validateMessages": {
+        "required": "${name} обязательно!",
+        "invalid": "${name} недействительно!",
+        "min": "${name} имя должно быть не менее ${min} символов"
+      },
       "mainPage": {
         "searchPlaceholder": "Поиск по сайту",
         "accountBtn": "Профиль",
         "loginBtn": "Логин",
+        "myCollectionsBtn": "Мои коллекции",
         "myAccountBtn": "Профиль",
         "logoutBtn": "Выйти",
         "section1": "Популярные Теги",
@@ -73,10 +140,6 @@
         "title": "Войдите в свой аккаунт",
         "question": "У вас нет аккаунта?",
         "link": "Регистрировать",
-        "validateMessages": {
-          "required": "${name} обязательно!",
-          "invalid": "${name} недействительно!"
-        },
         "email": {
           "label": "Электронная почта",
           "placeholder": "Введите адрес электронной почты"
@@ -91,10 +154,6 @@
         "title": "Зарегистрироваться",
         "question": "У вас уже есть аккаунт?",
         "link": "Авторизовать",
-        "validateMessages": {
-          "required": "${name} обязательно!",
-          "invalid": "${name} недействительно!"
-        },
         "username": {
           "label": "Имя пользователя",
           "placeholder": "Введите имя пользователя"
@@ -113,6 +172,68 @@
           "noMatchMessage": "Пароли не совпадают"
         },
         "btn": "Регистрировать"
+      },
+      "collectionPage": {
+        "title": "Таблица предметов",
+        "addItemBtn": "Добавить элемент",
+        "tableElements": {
+          "name": "Имя",
+          "tags": "Теги",
+          "links": "Ссылки",
+          "actions": "Действия",
+          "delBtn": "удалить",
+          "edBtn": "редактировать",
+          "more": "Еще"
+        },
+        "formElements": {
+          "modalTitle": "Добавить элемент",
+          "name": {
+            "label": "Имя",
+            "placeholder": "Введите название элемента"
+          },
+          "tags": {
+            "label": "Теги",
+            "placeholder": "Введите теги элемента"
+          },
+          "submitBtn": "Сохранять"
+        }
+      },
+      "userAccount": {
+        "title": "Мои коллекции",
+        "addCollectionBtn": "Добавить коллекцию",
+        "submitBtn": "Сохранять",
+        "formElements": {
+          "submitSuccessMsg": "Отправлено успешно!",
+          "submitFailsMsg": "Отправить не удалось!",
+          "modalTitle": "Добавить коллекцию",
+          "collectionImg": {
+            "label": "Изображение",
+            "placeholder": "Загрузить или перетащить"
+          },
+          "collectionName": {
+            "label": "Имя",
+            "placeholder": "Введите название коллекции"
+          },
+          "topic": {
+            "label": "Тема",
+            "placeholder": "Выберите тему коллекции",
+            "topics": "ru"
+          },
+          "textareaMarkdown": {
+            "label": "Описание",
+            "placeholder": "Напишите краткое описание вашей коллекции (поддерживается уценка)",
+            "tab1": "Писать",
+            "tab2": "Просмотр"
+          },
+          "customFields": {
+            "inpPlaceholder": "Имя поля",
+            "selectTypePlaceholder": "Выберите тип поля",
+            "limitFieldMessage": "Вы не можете добавить более 15 полей",
+            "addFieldBtn": "Добавить пользовательское поле",
+            "fieldInvalidMessage": "Имя поля и тип обязательны!",
+            "fieldTypes": "ru"
+          }
+        }
       }
     }
   }
