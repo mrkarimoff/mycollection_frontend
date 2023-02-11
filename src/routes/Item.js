@@ -10,7 +10,7 @@ const Item = () => {
   const itemId = window.location.pathname.split("/").at(-1);
   const isDarkTheme = useSelector(getTheme());
   const { defaultAlgorithm, darkAlgorithm } = theme;
-  const { Title, Text, Paragraph } = Typography;
+  const { Title, } = Typography;
 
   useEffect(() => {
     document.body.style.backgroundColor = isDarkTheme ? "#444" : "#e2e8f0";
@@ -53,7 +53,6 @@ const Item = () => {
                     fontWeight: "500",
                     color: isDarkTheme ? "red" : "#777",
                     width: "120px",
-                    // backgroundColor: "gold",
                   }}
                 >
                   Description
@@ -76,7 +75,6 @@ const Item = () => {
                     fontWeight: "500",
                     color: isDarkTheme ? "red" : "#777",
                     width: "120px",
-                    // backgroundColor: "gold",
                   }}
                 >
                   Tags
