@@ -22,7 +22,7 @@ const MainItems = () => {
               <Title level={4}>The book of Vishanti</Title>
             </Col>
             <Col>
-              <Link to={"#"}>
+              <Link to={"/items/1"}>
                 <RightCircleFilled style={{ fontSize: "28px" }} />
               </Link>
             </Col>
@@ -37,7 +37,7 @@ const MainItems = () => {
               <Title level={4}>Gold medal</Title>
             </Col>
             <Col>
-              <Link to={"#"}>
+              <Link to={"/items/2"}>
                 <RightCircleFilled style={{ fontSize: "28px" }} />
               </Link>
             </Col>
@@ -52,7 +52,7 @@ const MainItems = () => {
               <Title level={4}>Special stamp</Title>
             </Col>
             <Col>
-              <Link to={"#"}>
+              <Link to={"/items/3"}>
                 <RightCircleFilled style={{ fontSize: "28px" }} />
               </Link>
             </Col>

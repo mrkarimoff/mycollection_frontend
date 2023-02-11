@@ -17,9 +17,9 @@ const Register = () => {
   const uiLanguage = useSelector(getLanguage());
   const { Title } = Typography;
   const validateMessages = {
-    required: uiLanguage?.registerPage?.validateMessages?.required,
+    required: uiLanguage?.validateMessages?.required,
     pattern: {
-      mismatch: uiLanguage?.registerPage?.validateMessages?.invalid,
+      mismatch: uiLanguage?.validateMessages?.invalid,
     },
   };
 
@@ -80,7 +80,7 @@ const Register = () => {
               >
                 <Form.Item
                   label={uiLanguage?.registerPage?.username?.label}
-                  name={uiLanguage?.registerPage?.username?.label}
+                  name={uiLanguage?.registerPage?.username?.label.toLocaleLowerCase()}
                   rules={[
                     {
                       required: true,
@@ -96,7 +96,7 @@ const Register = () => {
 
                 <Form.Item
                   label={uiLanguage?.registerPage?.email?.label}
-                  name={uiLanguage?.registerPage?.email?.label}
+                  name={uiLanguage?.registerPage?.email?.label.toLocaleLowerCase()}
                   rules={[
                     {
                       required: true,
@@ -114,7 +114,7 @@ const Register = () => {
 
                 <Form.Item
                   label={uiLanguage?.registerPage?.password?.label}
-                  name={uiLanguage?.registerPage?.password?.label}
+                  name={uiLanguage?.registerPage?.password?.label.toLocaleLowerCase()}
                   rules={[
                     {
                       required: true,
@@ -131,7 +131,7 @@ const Register = () => {
 
                 <Form.Item
                   label={uiLanguage?.registerPage?.confirmPassword?.label}
-                  name={uiLanguage?.registerPage?.confirmPassword?.label}
+                  name={uiLanguage?.registerPage?.confirmPassword?.label.toLocaleLowerCase()}
                   rules={[
                     {
                       required: true,

@@ -12,20 +12,20 @@ import MainHeader from "../components/MainHeader";
 const Login = () => {
   const navigate = useNavigate();
   const { defaultAlgorithm, darkAlgorithm } = theme;
-  const siteTheme = useSelector(getTheme());
+  const isDarkTheme = useSelector(getTheme());
   const uiLanguage = useSelector(getLanguage());
   const { Title } = Typography;
   const validateMessages = {
-    required: uiLanguage?.loginPage?.validateMessages?.required,
+    required: uiLanguage?.validateMessages?.required,
     pattern: {
-      mismatch: uiLanguage?.loginPage?.validateMessages?.invalid,
+      mismatch: uiLanguage?.validateMessages?.invalid,
     },
   };
   // {withCredentials: true}
 
   useEffect(() => {
-    document.body.style.backgroundColor = siteTheme ? "#444" : "#e2e8f0";
-  }, [siteTheme]);
+    document.body.style.backgroundColor = isDarkTheme ? "#444" : "#e2e8f0";
+  }, [isDarkTheme]);
 
   const onFinish = (values) => {};
   const onFinishFailed = (errorInfo) => {
@@ -34,7 +34,7 @@ const Login = () => {
   return (
     <ConfigProvider
       theme={{
-        algorithm: siteTheme ? darkAlgorithm : defaultAlgorithm,
+        algorithm: isDarkTheme ? darkAlgorithm : defaultAlgorithm,
       }}
     >
       <MainHeader />
@@ -83,7 +83,7 @@ const Login = () => {
               >
                 <Form.Item
                   label={uiLanguage?.loginPage?.email?.label}
-                  name={uiLanguage?.loginPage?.email?.label}
+                  name={uiLanguage?.loginPage?.email?.label.toLocaleLowerCase()}
                   rules={[
                     {
                       required: true,
@@ -101,7 +101,7 @@ const Login = () => {
 
                 <Form.Item
                   label={uiLanguage?.loginPage?.password?.label}
-                  name={uiLanguage?.loginPage?.password?.label}
+                  name={uiLanguage?.loginPage?.password?.label.toLocaleLowerCase()}
                   rules={[
                     {
                       required: true,
