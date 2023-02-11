@@ -141,20 +141,3 @@ const Collection = () => {
 
 export default Collection;
 
-/*
-name="url"
-label="URL"
-rules={[
-  {
-    required: true,
-  },
-  {
-    type: "url",
-    warningOnly: false,
-  },
-  {
-    type: "string",
-    min: 6,
-  },
-]} 
- */
