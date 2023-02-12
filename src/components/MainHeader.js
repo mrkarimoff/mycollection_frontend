@@ -114,6 +114,7 @@ const MainHeader = () => {
           {/* <Button size="large" onClick={() => navigate("/login")}>
             {uiLanguage?.mainPage?.loginBtn}
           </Button> */}
+          {pathName === "/admin" && <Button size="large">{uiLanguage?.mainPage?.logoutBtn}</Button>}
           <Dropdown
             menu={{
               items,
@@ -121,7 +122,12 @@ const MainHeader = () => {
             placement="bottomRight"
             arrow
           >
-            <Button style={{ display: generalPages.includes(pathName) && "none" }} size="large">
+            <Button
+              style={{
+                display: (generalPages.includes(pathName) || pathName === "/admin") && "none",
+              }}
+              size="large"
+            >
               {uiLanguage?.mainPage?.myAccountBtn}
             </Button>
           </Dropdown>

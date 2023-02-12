@@ -6,11 +6,17 @@ import Item from "./routes/Item";
 import Login from "./routes/Login";
 import Register from "./routes/Register";
 import UserAccount from "./routes/UserAccount";
+import AdminPanel from "./routes/AdminPanel";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Home />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/admin",
+    element: <AdminPanel />,
     errorElement: <ErrorPage />,
   },
   {
