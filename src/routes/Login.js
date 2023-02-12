@@ -4,7 +4,6 @@ import axios from "axios";
 import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import config from "../config.json";
-import { ToastContainer, toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { getTheme, getLanguage } from "../redux/users/users.selectors";
 import MainHeader from "../components/MainHeader";
@@ -39,17 +38,6 @@ const Login = () => {
     >
       <MainHeader />
       <div style={{ paddingInline: "20px" }}>
-        <ToastContainer
-          position="top-center"
-          autoClose={3000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          draggable={false}
-          pauseOnHover={false}
-          theme="light"
-        />
         <div className="main">
           <div className="main-cont">
             <Title level={2}>{uiLanguage?.loginPage?.title}</Title>

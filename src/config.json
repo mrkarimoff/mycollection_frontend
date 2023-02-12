@@ -59,6 +59,7 @@
         "title": "Items Table",
         "addItemBtn": "Add Item",
         "tableElements": {
+          "tableLang": "eng",
           "name": "Name",
           "tags": "Tags",
           "links": "Links",
@@ -116,6 +117,16 @@
             "fieldTypes": "eng"
           }
         }
+      },
+      "adminPanel": {
+        "title": "Admin Panel",
+        "blockBtn": "Block",
+        "unblockBtn": "Unblock",
+        "deleteBtn": "Delete",
+        "makeAdminBtn": "Promote to Admin",
+        "removeAdminBtn": "Remove from admin",
+        "selectedMsg": "Selected items:",
+        "tableLang": "eng"
       }
     },
 
@@ -177,6 +188,7 @@
         "title": "Таблица предметов",
         "addItemBtn": "Добавить элемент",
         "tableElements": {
+          "tableLang": "ru",
           "name": "Имя",
           "tags": "Теги",
           "links": "Ссылки",
@@ -234,6 +246,16 @@
             "fieldTypes": "ru"
           }
         }
+      },
+      "adminPanel": {
+        "title": "Панель администратора",
+        "blockBtn": "Блокировать",
+        "unblockBtn": "Разблокировать",
+        "deleteBtn": "Удалить",
+        "makeAdminBtn": "Сделать администратором",
+        "removeAdminBtn": "Удалить из админки",
+        "selectedMsg": "Выбрано элементов:",
+        "tableLang": "ru"
       }
     }
   }
