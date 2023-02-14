@@ -1,10 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
 import config from "../../config.json";
+import {
+  getLocalTheme,
+  setLocalTheme,
+  getLocalLanguage,
+  setLocalLanguage,
+} from "../../utils/localStorage.service";
 
 const initialState = {
-  isDarkTheme: false,
-  UILanguage: config.UILanguage.eng,
-  defaultLang: "eng",
+  isDarkTheme: getLocalTheme() || false,
+  UILanguage: config.UILanguage[getLocalLanguage()] || config.UILanguage.eng,
+  defaultLang: getLocalLanguage() || "eng",
 };
 
 const usersSlice = createSlice({
@@ -13,12 +19,14 @@ const usersSlice = createSlice({
   reducers: {
     toggleTheme: (state) => {
       state.isDarkTheme = !state.isDarkTheme;
+      setLocalTheme(state.isDarkTheme);
     },
     changeLanguage: (state, action) => {
       state.UILanguage = action.payload;
     },
     setDefaultLang: (state, action) => {
       state.defaultLang = action.payload;
+      setLocalLanguage(action.payload);
     },
   },
 });
