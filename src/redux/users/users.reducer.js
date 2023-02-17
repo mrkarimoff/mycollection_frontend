@@ -5,12 +5,17 @@ import {
   setLocalTheme,
   getLocalLanguage,
   setLocalLanguage,
+  setLocalToken,
+  setLocalUsername,
+  setLocalRole,
 } from "../../utils/localStorage.service";
+import { message } from "antd";
 
 const initialState = {
   isDarkTheme: getLocalTheme() || false,
   UILanguage: config.UILanguage[getLocalLanguage()] || config.UILanguage.eng,
   defaultLang: getLocalLanguage() || "eng",
+  registerLoading: false,
 };
 
 const usersSlice = createSlice({
@@ -28,10 +33,41 @@ const usersSlice = createSlice({
       state.defaultLang = action.payload;
       setLocalLanguage(action.payload);
     },
+    onRegisterStart: (state) => {
+      state.registerLoading = true;
+    },
+    onRegisterSuccess: (state, action) => {
+      message.success(action.payload);
+      state.registerLoading = false;
+    },
+    onRegisterFail: (state, action) => {
+      message.error(action.payload);
+      state.registerLoading = false;
+    },
+    onLoginStart: () => {},
+    onLoginSuccess: (state, { payload }) => {
+      setLocalToken(payload.data);
+      setLocalRole(payload.role);
+      message.success(payload.message);
+      setLocalUsername(payload.username);
+    },
+    onLoginFail: (state, { payload }) => {
+      message.error(payload);
+    },
   },
 });
 
 const usersReducer = usersSlice.reducer;
-export const { toggleTheme, changeLanguage, setDefaultLang } = usersSlice.actions;
+export const {
+  toggleTheme,
+  changeLanguage,
+  setDefaultLang,
+  onRegisterStart,
+  onRegisterSuccess,
+  onRegisterFail,
+  onLoginStart,
+  onLoginSuccess,
+  onLoginFail,
+} = usersSlice.actions;
 
 export default usersReducer;

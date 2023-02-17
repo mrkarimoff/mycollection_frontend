@@ -1,15 +1,15 @@
 import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
 import { Button, Card, ConfigProvider, Form, Input, Typography, theme } from "antd";
-import axios from "axios";
 import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import config from "../config.json";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { getTheme, getLanguage } from "../redux/users/users.selectors";
 import MainHeader from "../components/MainHeader";
+import { onLoginStart } from "../redux/users/users.reducer";
 
 const Login = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { defaultAlgorithm, darkAlgorithm } = theme;
   const isDarkTheme = useSelector(getTheme());
   const uiLanguage = useSelector(getLanguage());
@@ -19,6 +19,9 @@ const Login = () => {
     pattern: {
       mismatch: uiLanguage?.validateMessages?.invalid,
     },
+    string: {
+      min: uiLanguage?.validateMessages?.min,
+    },
   };
   // {withCredentials: true}
 
@@ -26,7 +29,9 @@ const Login = () => {
     document.body.style.backgroundColor = isDarkTheme ? "#444" : "#e2e8f0";
   }, [isDarkTheme]);
 
-  const onFinish = (values) => {};
+  const onFinish = (values) => {
+    dispatch(onLoginStart({ values, navigate }));
+  };
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
@@ -71,7 +76,7 @@ const Login = () => {
               >
                 <Form.Item
                   label={uiLanguage?.loginPage?.email?.label}
-                  name={uiLanguage?.loginPage?.email?.label.toLocaleLowerCase()}
+                  name={"email"}
                   rules={[
                     {
                       required: true,
@@ -89,10 +94,14 @@ const Login = () => {
 
                 <Form.Item
                   label={uiLanguage?.loginPage?.password?.label}
-                  name={uiLanguage?.loginPage?.password?.label.toLocaleLowerCase()}
+                  name={"password"}
                   rules={[
                     {
                       required: true,
+                    },
+                    {
+                      type: "string",
+                      min: 8,
                     },
                   ]}
                 >

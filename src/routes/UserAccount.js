@@ -104,7 +104,7 @@ const UserAccount = () => {
             />
             <Form.Item
               label={uiLanguage?.userAccount?.formElements?.collectionName?.label}
-              name={uiLanguage?.userAccount?.formElements?.collectionName?.label.toLocaleLowerCase()}
+              name={"collectionName"}
               rules={[
                 {
                   required: true,
@@ -121,7 +121,7 @@ const UserAccount = () => {
             </Form.Item>
             <Form.Item
               label={uiLanguage?.userAccount?.formElements?.topic?.label}
-              name={uiLanguage?.userAccount?.formElements?.topic?.label.toLocaleLowerCase()}
+              name={"topics"}
               rules={[
                 {
                   required: true,
@@ -144,7 +144,7 @@ const UserAccount = () => {
 
             <TextareaMarkdown
               label={uiLanguage?.userAccount?.formElements?.textareaMarkdown?.label}
-              name={uiLanguage?.userAccount?.formElements?.textareaMarkdown?.label.toLocaleLowerCase()}
+              name={"description"}
               placeholder={uiLanguage?.userAccount?.formElements?.textareaMarkdown?.placeholder}
               tab1={uiLanguage?.userAccount?.formElements?.textareaMarkdown?.tab1}
               tab2={uiLanguage?.userAccount?.formElements?.textareaMarkdown?.tab2}
