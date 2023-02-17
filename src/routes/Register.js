@@ -1,24 +1,28 @@
 import { EyeInvisibleOutlined, EyeTwoTone, UserOutlined } from "@ant-design/icons";
 import { Button, Card, ConfigProvider, Form, Input, Typography, theme } from "antd";
-import axios from "axios";
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
-import config from "../config.json";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { getLanguage, getTheme } from "../redux/users/users.selectors";
+import { useSelector, useDispatch } from "react-redux";
+import { getLanguage, getTheme, getRegisterLoading } from "../redux/users/users.selectors";
 import MainHeader from "../components/MainHeader";
+import { onRegisterStart } from "../redux/users/users.reducer";
 
 const Register = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { defaultAlgorithm, darkAlgorithm } = theme;
   const isDarkTheme = useSelector(getTheme());
   const uiLanguage = useSelector(getLanguage());
+  const registerLoading = useSelector(getRegisterLoading());
   const { Title } = Typography;
   const validateMessages = {
     required: uiLanguage?.validateMessages?.required,
     pattern: {
       mismatch: uiLanguage?.validateMessages?.invalid,
+    },
+    string: {
+      min: uiLanguage?.validateMessages?.min,
     },
   };
 
@@ -26,7 +30,10 @@ const Register = () => {
     document.body.style.backgroundColor = isDarkTheme ? "#444" : "#e2e8f0";
   }, [isDarkTheme]);
 
-  const onFinish = (values) => {};
+  const onFinish = (values) => {
+    delete values.confirm_password;
+    dispatch(onRegisterStart({ values, navigate }));
+  };
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
@@ -68,7 +75,7 @@ const Register = () => {
               >
                 <Form.Item
                   label={uiLanguage?.registerPage?.username?.label}
-                  name={uiLanguage?.registerPage?.username?.label.toLocaleLowerCase()}
+                  name={"username"}
                   rules={[
                     {
                       required: true,
@@ -84,7 +91,7 @@ const Register = () => {
 
                 <Form.Item
                   label={uiLanguage?.registerPage?.email?.label}
-                  name={uiLanguage?.registerPage?.email?.label.toLocaleLowerCase()}
+                  name={"email"}
                   rules={[
                     {
                       required: true,
@@ -102,10 +109,14 @@ const Register = () => {
 
                 <Form.Item
                   label={uiLanguage?.registerPage?.password?.label}
-                  name={uiLanguage?.registerPage?.password?.label.toLocaleLowerCase()}
+                  name={"password"}
                   rules={[
                     {
                       required: true,
+                    },
+                    {
+                      type: "string",
+                      min: 8,
                     },
                   ]}
                 >
@@ -119,7 +130,7 @@ const Register = () => {
 
                 <Form.Item
                   label={uiLanguage?.registerPage?.confirmPassword?.label}
-                  name={uiLanguage?.registerPage?.confirmPassword?.label.toLocaleLowerCase()}
+                  name={"confirm_password"}
                   rules={[
                     {
                       required: true,
@@ -145,7 +156,13 @@ const Register = () => {
                 </Form.Item>
 
                 <Form.Item style={{ marginTop: "30px" }}>
-                  <Button size="large" style={{ width: "100%" }} type="primary" htmlType="submit">
+                  <Button
+                    loading={registerLoading}
+                    size="large"
+                    style={{ width: "100%" }}
+                    type="primary"
+                    htmlType="submit"
+                  >
                     {uiLanguage?.registerPage?.btn}
                   </Button>
                 </Form.Item>

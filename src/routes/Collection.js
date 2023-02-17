@@ -201,7 +201,7 @@ const Collection = () => {
           >
             <Form.Item
               label={uiLanguage?.collectionPage?.formElements?.name?.label}
-              name={uiLanguage?.collectionPage?.formElements?.name?.label.toLocaleLowerCase()}
+              name={"name"}
               rules={[
                 {
                   required: true,
@@ -216,7 +216,7 @@ const Collection = () => {
             </Form.Item>
             <Form.Item
               label={uiLanguage?.collectionPage?.formElements?.tags?.label}
-              name={uiLanguage?.collectionPage?.formElements?.tags?.label.toLocaleLowerCase()}
+              name={"tags"}
               rules={[
                 {
                   required: true,

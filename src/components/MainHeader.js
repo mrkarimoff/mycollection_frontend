@@ -6,9 +6,18 @@ import { Link, useNavigate } from "react-router-dom";
 import config from "../config.json";
 import { changeLanguage, setDefaultLang, toggleTheme } from "../redux/users/users.reducer";
 import { getDefaultLang, getLanguage, getTheme } from "../redux/users/users.selectors";
+import {
+  getLocalUsername,
+  getLocalToken,
+  getLocalRole,
+  removeAuthDetails,
+} from "../utils/localStorage.service";
 
 const MainHeader = () => {
   const dispatch = useDispatch();
+  const username = getLocalUsername();
+  const role = getLocalRole();
+  const token = getLocalToken();
   const siteTheme = useSelector(getTheme());
   const uiLanguage = useSelector(getLanguage());
   const defaultLang = useSelector(getDefaultLang());
@@ -29,14 +38,32 @@ const MainHeader = () => {
     {
       key: "1",
       label: (
-        <Button onClick={() => navigate("/username")} type="ghost">
+        <Button onClick={() => navigate(`/${username}`)} type="ghost">
           {uiLanguage?.mainPage?.myCollectionsBtn}
         </Button>
       ),
     },
-    {
+    role === "Admin" && {
       key: "2",
-      label: <Button type="ghost">{uiLanguage?.mainPage?.logoutBtn}</Button>,
+      label: (
+        <Button onClick={() => navigate(`/admin`)} type="ghost">
+          Admin Panel
+        </Button>
+      ),
+    },
+    {
+      key: "3",
+      label: (
+        <Button
+          onClick={() => {
+            removeAuthDetails();
+            window.location.reload();
+          }}
+          type="ghost"
+        >
+          {uiLanguage?.mainPage?.logoutBtn}
+        </Button>
+      ),
     },
   ];
 
@@ -111,26 +138,28 @@ const MainHeader = () => {
           >
             <img width={"30px"} src={`/${siteTheme ? "moon" : "sun"}.png`} alt="themeIcon" />
           </Button>
-          {/* <Button size="large" onClick={() => navigate("/login")}>
-            {uiLanguage?.mainPage?.loginBtn}
-          </Button> */}
-          {pathName === "/admin" && <Button size="large">{uiLanguage?.mainPage?.logoutBtn}</Button>}
-          <Dropdown
-            menu={{
-              items,
-            }}
-            placement="bottomRight"
-            arrow
-          >
-            <Button
-              style={{
-                display: (generalPages.includes(pathName) || pathName === "/admin") && "none",
-              }}
-              size="large"
-            >
-              {uiLanguage?.mainPage?.myAccountBtn}
+          {!token ? (
+            <Button size="large" onClick={() => navigate("/login")}>
+              {uiLanguage?.mainPage?.loginBtn}
             </Button>
-          </Dropdown>
+          ) : (
+            <Dropdown
+              menu={{
+                items,
+              }}
+              placement="bottomRight"
+              arrow
+            >
+              <Button
+                style={{
+                  display: generalPages.includes(pathName) && "none",
+                }}
+                size="large"
+              >
+                {uiLanguage?.mainPage?.myAccountBtn}
+              </Button>
+            </Dropdown>
+          )}
         </div>
       </Col>
     </Header>
