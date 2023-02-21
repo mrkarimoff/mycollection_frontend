@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getLanguage, getTheme } from "../redux/users/users.selectors";
 import { Button, ConfigProvider, Form, Input, Select, message, theme } from "antd";
 import MainHeader from "../components/MainHeader";
@@ -11,15 +11,31 @@ import TextareaMarkdown from "../components/TextareaMarkdown";
 import UploadImage from "../components/UploadImage";
 import { topicsEng, topicsRu } from "../constants/topics";
 import CustomFields from "../components/CustomFields";
+import { fieldTypesEng, fieldTypesRu } from "../constants/fieldTypes";
+import { getLocalRole, getLocalToken, getLocalUsername } from "../utils/localStorage.service";
+import { useNavigate } from "react-router-dom";
+import { createCollection, getCollections } from "../redux/collections/collections.reducer";
+import { getCollectionEntities } from "../redux/collections/collections.selectors";
 
 const UserAccount = () => {
-  const username = window.location.pathname.split("/").at(-1);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const urlParams = window.location.pathname.split("/").at(-1);
   const isDarkTheme = useSelector(getTheme());
+  const collectionEntities = useSelector(getCollectionEntities());
+  const token = getLocalToken();
+  const role = getLocalRole();
+  const username = getLocalUsername();
   const uiLanguage = useSelector(getLanguage());
   const { defaultAlgorithm, darkAlgorithm } = theme;
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [fields, setFields] = useState([]);
+  const [fieldTypes, setFieldTypes] = useState(
+    uiLanguage?.userAccount?.formElements?.customFields?.fieldTypes === "eng"
+      ? fieldTypesEng
+      : fieldTypesRu
+  );
   const [fileList, setFileList] = useState([]);
   const [markdownText, setMarkdownText] = useState("");
   const [form] = Form.useForm();
@@ -34,10 +50,18 @@ const UserAccount = () => {
     document.body.style.backgroundColor = isDarkTheme ? "#444" : "#e2e8f0";
   }, [isDarkTheme]);
 
+  useEffect(() => {
+    if (role && username && token) {
+      dispatch(getCollections(urlParams));
+    } else {
+      navigate("/");
+    }
+  }, [urlParams]);
+
   const validateCustomFields = () => {
     let isValid = true;
     const validatedFields = fields?.map((field) => {
-      if (field?.fieldName === "" || field?.type === "") {
+      if (field?.label === "" || field?.type === "") {
         isValid = false;
         return { ...field, invalid: true };
       }
@@ -52,10 +76,12 @@ const UserAccount = () => {
 
     if (isFieldsValid) {
       let img = await values.collectionImg;
-      const newValues = { ...values, collectionImg: img, customFields: fields };
-      console.log("Form Values", newValues);
-
+      const newValues = { ...values, collectionImg: img, customFields: fields, urlParams };
       setConfirmLoading(true);
+
+      // Create Collection
+      dispatch(createCollection(newValues));
+
       setTimeout(() => {
         setOpen(false);
         setConfirmLoading(false);
@@ -63,8 +89,13 @@ const UserAccount = () => {
         form.resetFields();
         setFileList([]);
         setFields([]);
+        setFieldTypes(
+          uiLanguage?.userAccount?.formElements?.customFields?.fieldTypes === "eng"
+            ? fieldTypesEng
+            : fieldTypesRu
+        );
         setMarkdownText("");
-      }, 2000);
+      }, 1500);
     } else {
       message.error(uiLanguage?.userAccount?.formElements?.submitFailsMsg);
     }
@@ -121,7 +152,7 @@ const UserAccount = () => {
             </Form.Item>
             <Form.Item
               label={uiLanguage?.userAccount?.formElements?.topic?.label}
-              name={"topics"}
+              name={"topic"}
               rules={[
                 {
                   required: true,
@@ -161,7 +192,7 @@ const UserAccount = () => {
             />
             <hr />
             <CustomFields
-              {...{ fields, setFields }}
+              {...{ fields, setFields, fieldTypes, setFieldTypes }}
               customFieldsLang={uiLanguage?.userAccount?.formElements?.customFields}
             />
             <Form.Item style={{ margin: 0, marginTop: "20px" }}>
@@ -189,10 +220,9 @@ const UserAccount = () => {
           </Button>
         </div>
 
-        <CollectionsLayout />
+        <CollectionsLayout data={collectionEntities} />
       </Wrapper>
     </ConfigProvider>
   );
 };
-
 export default UserAccount;

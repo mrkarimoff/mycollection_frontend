@@ -1,14 +1,9 @@
 import { PlusOutlined } from "@ant-design/icons";
 import { Button, Input, Select, message } from "antd";
-import { useState } from "react";
 import { v4 as uuid } from "uuid";
-import { fieldTypesEng, fieldTypesRu } from "../constants/fieldTypes";
 
-const CustomFields = ({ fields, setFields, customFieldsLang }) => {
+const CustomFields = ({ fields, setFields, customFieldsLang, fieldTypes, setFieldTypes }) => {
   const field_id = uuid();
-  const [fieldTypes, setFieldTypes] = useState(
-    customFieldsLang?.fieldTypes === "eng" ? fieldTypesEng : fieldTypesRu
-  );
 
   function limitFieldTypes() {
     let newFieldTypes = fieldTypes;
@@ -32,7 +27,7 @@ const CustomFields = ({ fields, setFields, customFieldsLang }) => {
 
   function addField() {
     if (fields.length < 15) {
-      fields.push({ fieldName: "", type: "", field_id, invalid: false });
+      fields.push({ label: "", type: "", field_id, invalid: false });
       setFields([...fields]);
     } else {
       message.error(customFieldsLang?.limitFieldMessage);
@@ -40,7 +35,7 @@ const CustomFields = ({ fields, setFields, customFieldsLang }) => {
   }
 
   function handleInputChange(e, index) {
-    fields[index].fieldName = e.target.value;
+    fields[index].label = e.target.value;
     fields[index].invalid = e.target.value === "";
     setFields([...fields]);
   }

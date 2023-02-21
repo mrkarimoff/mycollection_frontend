@@ -45,13 +45,13 @@ const usersSlice = createSlice({
       state.registerLoading = false;
     },
     onLoginStart: () => {},
-    onLoginSuccess: (state, { payload }) => {
+    onLoginSuccess: (_, { payload }) => {
       setLocalToken(payload.data);
       setLocalRole(payload.role);
       message.success(payload.message);
       setLocalUsername(payload.username);
     },
-    onLoginFail: (state, { payload }) => {
+    onLoginFail: (_, { payload }) => {
       message.error(payload);
     },
   },

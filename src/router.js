@@ -15,7 +15,7 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
   {
-    path: "/admin",
+    path: "/admin-panel",
     element: <AdminPanel />,
     errorElement: <ErrorPage />,
   },
@@ -46,6 +46,6 @@ const router = createBrowserRouter([
   },
 ]);
 
-//"http://localhost:4000"
+//"https://mycollectionbackend-production.up.railway.app"
 
 export default router;

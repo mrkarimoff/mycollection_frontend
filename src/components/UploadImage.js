@@ -27,16 +27,11 @@ const UploadImage = ({ uploadImageLang, fileList, setFileList }) => {
 
   const handleChange = ({ fileList: newFileList }) => setFileList(newFileList);
 
-  const getFile = async (e) => {
+  const getFile = (e) => {
     if (Array.isArray(e)) {
       return e;
     }
-    if (e?.fileList[0]) {
-      const result = await getBase64(e.fileList[0].originFileObj);
-      return result;
-    } else {
-      return "";
-    }
+    return e && e.file;
   };
 
   const uploadButton = (
