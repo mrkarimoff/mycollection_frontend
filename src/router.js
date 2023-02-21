@@ -15,7 +15,7 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
   {
-    path: "/admin",
+    path: "/admin-panel",
     element: <AdminPanel />,
     errorElement: <ErrorPage />,
   },

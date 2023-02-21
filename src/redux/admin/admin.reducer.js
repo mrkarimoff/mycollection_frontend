@@ -21,8 +21,8 @@ const adminSlice = createSlice({
       state.userLoading = false;
       message.error(action.payload);
     },
-    updateUsers: (state, action) => {},
-    deleteUsers: (state, action) => {},
+    updateUsers: () => {},
+    deleteUsers: () => {},
   },
 });
 

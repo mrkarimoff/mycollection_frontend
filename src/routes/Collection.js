@@ -38,22 +38,27 @@ const Collection = () => {
       title: uiLanguage?.collectionPage?.tableElements?.tags,
       dataIndex: "tags",
       width: 120,
-      sorter: (a, b) => a.tags.localeCompare(b.tags),
+      sorter: (a, b) => a.name.localeCompare(b.name),
       sortDirections: ["descend", "ascend"],
-      render: (tags) => <Tag color={"green"}>{tags}</Tag>,
-      filters: [
-        {
-          text: "Old Items",
-          value: "old",
-        },
-        {
-          text: "New Items",
-          value: "new",
-        },
-      ],
-      filterMode: "tree",
-      filterSearch: true,
-      onFilter: (value, record) => record.tags.startsWith(value),
+      render: (tags) =>
+        tags?.map((tag, i) => (
+          <Tag key={i} color={"green"}>
+            {tag}
+          </Tag>
+        )),
+      // filters: [
+      //   {
+      //     text: "Old Items",
+      //     value: "old",
+      //   },
+      //   {
+      //     text: "New Items",
+      //     value: "new",
+      //   },
+      // ],
+      // filterMode: "tree",
+      // filterSearch: true,
+      // onFilter: (value, record) => record.tags.startsWith(value),
     },
     {
       title: uiLanguage?.collectionPage?.tableElements?.links,
@@ -85,62 +90,62 @@ const Collection = () => {
     {
       key: "234234",
       name: "Book1",
-      tags: "old",
+      tags: ["old", "new", "hello"],
     },
     {
       key: "rwerwerw",
       name: "Book2",
-      tags: "new",
+      tags: ["old", "new", "hello"],
     },
     {
       key: "234terer",
       name: "Book3",
-      tags: "new",
+      tags: ["old", "new", "hello"],
     },
     {
       key: "gfh455",
       name: "Book4",
-      tags: "old",
+      tags: ["old", "new", "hello"],
     },
     {
       key: "567ughjg",
       name: "Book5",
-      tags: "old",
+      tags: ["old", "new", "hello"],
     },
     {
       key: "65ughjgh",
       name: "Book6",
-      tags: "old",
+      tags: ["old", "new", "hello"],
     },
     {
       key: "nvbnty65",
       name: "Book7",
-      tags: "old",
+      tags: ["old", "new", "hello"],
     },
     {
       key: "25trgfh5",
       name: "Book8",
-      tags: "old",
+      tags: ["old", "new", "hello"],
     },
     {
       key: "2343tyhfgh56p",
       name: "Book9",
-      tags: "old",
+      tags: ["old", "new", "hello"],
     },
     {
       key: "67867fhfghgf2",
       name: "Book10",
-      tags: "old",
+      tags: ["old", "new", "hello"],
     },
     {
       key: "1321fgdg54wewe",
       name: "Book11",
-      tags: "old",
+      tags: ["old", "new", "hello"],
     },
     {
       key: "sdf2342fsd",
       name: "Book12",
-      tags: "old",
+      tags: ["old", "new", "hello"],
     },
   ];
 

@@ -123,6 +123,7 @@ a {
 .collectionPic {
   height: 150px;
   background-size: cover;
+  background-position: center;
   background-repeat: no-repeat;
   border-radius: 10px;
 }

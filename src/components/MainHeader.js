@@ -46,7 +46,7 @@ const MainHeader = () => {
     role === "Admin" && {
       key: "2",
       label: (
-        <Button onClick={() => navigate(`/admin`)} type="ghost">
+        <Button onClick={() => navigate(`/admin-panel`)} type="ghost">
           Admin Panel
         </Button>
       ),
