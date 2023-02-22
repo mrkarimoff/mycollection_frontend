@@ -1,15 +1,53 @@
-import { Button, Card, Col, Row } from "antd";
+import { Button, Card, Col, Modal, Row } from "antd";
 import React from "react";
 import ReactMarkdown from "react-markdown";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { getLanguage } from "../redux/users/users.selectors";
+import {
+  changeCurrentCollection,
+  deleteCollection,
+} from "../redux/collections/collections.reducer";
+import { ExclamationCircleFilled } from "@ant-design/icons";
 
-export default function CollectionsLayout({ data }) {
+export default function CollectionsLayout({ data, form, setOpen, setFields, setMarkdownText }) {
+  const dispatch = useDispatch();
   const pathname = window.location.pathname;
   const uiLanguage = useSelector(getLanguage());
+  const [modal, contextHolder] = Modal.useModal();
+
+  const deleteCol = (payload) => {
+    modal.confirm({
+      title: "Do you really want to delete this collection?",
+      icon: <ExclamationCircleFilled />,
+      content: "If you delete it, all items in it will be deleted as well!",
+      onOk() {
+        dispatch(deleteCollection(payload));
+      },
+    });
+  };
+
+  const editCol = (collection) => {
+    dispatch(
+      changeCurrentCollection({ id: collection?._id, imgName: collection?.collectionImg?.imgName })
+    );
+    const { collectionImg, collectionName, description, topic } = collection;
+    const nameLessCustomFields = collection?.customFields?.map((field) => ({
+      field_id: field.field_id,
+      invalid: field.invalid,
+      label: field.label,
+      type: field.type,
+    }));
+
+    setFields(nameLessCustomFields);
+    setMarkdownText(collection?.description);
+    form.setFieldsValue({ collectionImg, collectionName, description, topic });
+    setOpen(true);
+  };
+
   return (
     <Row style={{ gap: "15px", justifyContent: "center", alignItems: "center" }}>
+      {contextHolder}
       {data?.map((collection) => (
         <Col key={collection._id}>
           <Card
@@ -25,8 +63,18 @@ export default function CollectionsLayout({ data }) {
               pathname === "/"
                 ? null
                 : [
-                    <Button>{uiLanguage?.collectionPage?.tableElements?.edBtn}</Button>,
-                    <Button onClick={() => console.log(collection._id)}>
+                    <Button onClick={() => editCol(collection)}>
+                      {uiLanguage?.collectionPage?.tableElements?.edBtn}
+                    </Button>,
+                    <Button
+                      onClick={() =>
+                        deleteCol({
+                          colId: collection?._id,
+                          imgData: collection?.collectionImg,
+                          urlParams: pathname.split("/").at(-1),
+                        })
+                      }
+                    >
                       {uiLanguage?.collectionPage?.tableElements?.delBtn}
                     </Button>,
                   ]
@@ -34,9 +82,9 @@ export default function CollectionsLayout({ data }) {
           >
             <div className="topic">{collection?.topic}</div>
             <Link to={`/collections/${collection?._id}`}>
-              {collection?.collectionImg && (
+              {collection?.collectionImg?.imgUrl && (
                 <div
-                  style={{ backgroundImage: `url(${collection?.collectionImg})` }}
+                  style={{ backgroundImage: `url(${collection?.collectionImg?.imgUrl})` }}
                   className="collectionPic"
                 />
               )}

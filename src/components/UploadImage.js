@@ -1,6 +1,6 @@
 import { PlusOutlined } from "@ant-design/icons";
 import { Form, Modal, Upload } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const getBase64 = (file) =>
   new Promise((resolve, reject) => {
@@ -10,11 +10,16 @@ const getBase64 = (file) =>
     reader.onerror = (error) => reject(error);
   });
 
-const UploadImage = ({ uploadImageLang, fileList, setFileList }) => {
+const UploadImage = ({ uploadImageLang, fileList, setFileList, form }) => {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
   const handleCancel = () => setPreviewOpen(false);
+  const [formSetImgUrl, setFormSetImgUrl] = useState();
+
+  useEffect(() => {
+    setFormSetImgUrl(form.getFieldValue("collectionImg"));
+  }, [form.getFieldValue("collectionImg")]);
 
   const handlePreview = async (file) => {
     if (!file.url && !file.preview) {
@@ -70,7 +75,11 @@ const UploadImage = ({ uploadImageLang, fileList, setFileList }) => {
           onChange={handleChange}
           beforeUpload={() => false}
         >
-          {fileList.length >= 1 ? null : uploadButton}
+          {formSetImgUrl?.imgUrl ? (
+            <img width={"80px"} src={formSetImgUrl?.imgUrl} alt="prevPicture" />
+          ) : fileList.length >= 1 ? null : (
+            uploadButton
+          )}
         </Upload>
       </Form.Item>
       <Modal open={previewOpen} title={previewTitle} footer={null} onCancel={handleCancel}>

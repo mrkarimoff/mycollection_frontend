@@ -14,14 +14,23 @@ import CustomFields from "../components/CustomFields";
 import { fieldTypesEng, fieldTypesRu } from "../constants/fieldTypes";
 import { getLocalRole, getLocalToken, getLocalUsername } from "../utils/localStorage.service";
 import { useNavigate } from "react-router-dom";
-import { createCollection, getCollections } from "../redux/collections/collections.reducer";
-import { getCollectionEntities } from "../redux/collections/collections.selectors";
+import {
+  changeCurrentCollection,
+  createCollection,
+  getCollections,
+  updateCollection,
+} from "../redux/collections/collections.reducer";
+import {
+  getCollectionEntities,
+  getCurrentCollection,
+} from "../redux/collections/collections.selectors";
 
 const UserAccount = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const urlParams = window.location.pathname.split("/").at(-1);
   const isDarkTheme = useSelector(getTheme());
+  const currentCollection = useSelector(getCurrentCollection());
   const collectionEntities = useSelector(getCollectionEntities());
   const token = getLocalToken();
   const role = getLocalRole();
@@ -45,6 +54,14 @@ const UserAccount = () => {
       min: uiLanguage?.validateMessages?.min,
     },
   };
+
+  useEffect(() => {
+    setFieldTypes(
+      uiLanguage?.userAccount?.formElements?.customFields?.fieldTypes === "eng"
+        ? fieldTypesEng
+        : fieldTypesRu
+    );
+  }, [uiLanguage?.userAccount?.formElements?.customFields?.fieldTypes]);
 
   useEffect(() => {
     document.body.style.backgroundColor = isDarkTheme ? "#444" : "#e2e8f0";
@@ -71,31 +88,30 @@ const UserAccount = () => {
     return isValid;
   };
 
-  const onFinish = async (values) => {
+  const onFinish = (values) => {
     const isFieldsValid = validateCustomFields();
 
     if (isFieldsValid) {
-      let img = await values.collectionImg;
-      const newValues = { ...values, collectionImg: img, customFields: fields, urlParams };
-      setConfirmLoading(true);
-
-      // Create Collection
-      dispatch(createCollection(newValues));
-
-      setTimeout(() => {
-        setOpen(false);
-        setConfirmLoading(false);
-        message.success(uiLanguage?.userAccount?.formElements?.submitSuccessMsg);
-        form.resetFields();
-        setFileList([]);
-        setFields([]);
-        setFieldTypes(
-          uiLanguage?.userAccount?.formElements?.customFields?.fieldTypes === "eng"
-            ? fieldTypesEng
-            : fieldTypesRu
+      if (currentCollection === "") {
+        // Create Collection
+        const newValues = { ...values, customFields: fields, urlParams };
+        setConfirmLoading(true);
+        dispatch(createCollection(newValues));
+        setTimeout(() => {
+          emptyForm();
+          message.success(uiLanguage?.userAccount?.formElements?.submitSuccessMsg);
+        }, 1500);
+      } else {
+        // Update Collection
+        setConfirmLoading(true);
+        dispatch(
+          updateCollection({ ...values, customFields: fields, urlParams, currentCollection })
         );
-        setMarkdownText("");
-      }, 1500);
+        setTimeout(() => {
+          emptyForm();
+          message.success(uiLanguage?.userAccount?.formElements?.submitSuccessMsg);
+        }, 1500);
+      }
     } else {
       message.error(uiLanguage?.userAccount?.formElements?.submitFailsMsg);
     }
@@ -104,6 +120,21 @@ const UserAccount = () => {
   const onFinishFailed = () => {
     message.error(uiLanguage?.userAccount?.formElements?.submitFailsMsg);
     validateCustomFields();
+  };
+
+  const emptyForm = () => {
+    dispatch(changeCurrentCollection(""));
+    setOpen(false);
+    setConfirmLoading(false);
+    form.resetFields();
+    setFileList([]);
+    setFields([]);
+    setFieldTypes(
+      uiLanguage?.userAccount?.formElements?.customFields?.fieldTypes === "eng"
+        ? fieldTypesEng
+        : fieldTypesRu
+    );
+    setMarkdownText("");
   };
 
   return (
@@ -119,7 +150,7 @@ const UserAccount = () => {
       <Wrapper style={{ marginBottom: "20px" }}>
         <ModalDialog
           title={uiLanguage?.userAccount?.formElements?.modalTitle}
-          {...{ open, setOpen }}
+          {...{ open, setOpen, onCancel: emptyForm }}
         >
           <Form
             form={form}
@@ -130,7 +161,7 @@ const UserAccount = () => {
             autoComplete="off"
           >
             <UploadImage
-              {...{ fileList, setFileList }}
+              {...{ fileList, setFileList, form }}
               uploadImageLang={uiLanguage?.userAccount?.formElements?.collectionImg}
             />
             <Form.Item
@@ -220,7 +251,10 @@ const UserAccount = () => {
           </Button>
         </div>
 
-        <CollectionsLayout data={collectionEntities} />
+        <CollectionsLayout
+          {...{ form, setOpen, setFields, setMarkdownText }}
+          data={collectionEntities}
+        />
       </Wrapper>
     </ConfigProvider>
   );

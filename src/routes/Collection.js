@@ -1,6 +1,6 @@
 import { Button, ConfigProvider, Form, Input, Select, Tag, Typography, message, theme } from "antd";
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import TableComponent from "../components/TableComponent";
 import MainHeader from "../components/MainHeader";
 import ModalDialog from "../components/ModalDialog";
@@ -9,11 +9,15 @@ import { getLanguage, getTheme } from "../redux/users/users.selectors";
 import { Link } from "react-router-dom";
 import rus from "antd/locale/ru_RU";
 import eng from "antd/locale/en_US";
+import { getCollectionCustomFields } from "../redux/items/items.reducer";
+import { getCustomFields } from "../redux/items/items.selectors";
 
 const Collection = () => {
   const collectionId = window.location.pathname.split("/").at(-1);
   const isDarkTheme = useSelector(getTheme());
+  const dispatch = useDispatch();
   const uiLanguage = useSelector(getLanguage());
+  const customFields = useSelector(getCustomFields());
   const { Title } = Typography;
   const { defaultAlgorithm, darkAlgorithm } = theme;
   const [open, setOpen] = useState(false);
@@ -26,10 +30,14 @@ const Collection = () => {
     },
   };
 
+  useEffect(() => {
+    dispatch(getCollectionCustomFields(collectionId));
+  }, []);
+
   const columns = [
     {
       title: uiLanguage?.collectionPage?.tableElements?.name,
-      dataIndex: "name",
+      dataIndex: "itemName",
       width: 120,
       sorter: (a, b) => a.name.localeCompare(b.name),
       sortDirections: ["descend", "ascend"],
@@ -42,7 +50,7 @@ const Collection = () => {
       sortDirections: ["descend", "ascend"],
       render: (tags) =>
         tags?.map((tag, i) => (
-          <Tag key={i} color={"green"}>
+          <Tag key={i} color={"#52c41a"}>
             {tag}
           </Tag>
         )),
@@ -89,62 +97,62 @@ const Collection = () => {
   const data = [
     {
       key: "234234",
-      name: "Book1",
+      itemName: "Book1",
       tags: ["old", "new", "hello"],
     },
     {
       key: "rwerwerw",
-      name: "Book2",
+      itemName: "Book2",
       tags: ["old", "new", "hello"],
     },
     {
       key: "234terer",
-      name: "Book3",
+      itemName: "Book3",
       tags: ["old", "new", "hello"],
     },
     {
       key: "gfh455",
-      name: "Book4",
+      itemName: "Book4",
       tags: ["old", "new", "hello"],
     },
     {
       key: "567ughjg",
-      name: "Book5",
+      itemName: "Book5",
       tags: ["old", "new", "hello"],
     },
     {
       key: "65ughjgh",
-      name: "Book6",
+      itemName: "Book6",
       tags: ["old", "new", "hello"],
     },
     {
       key: "nvbnty65",
-      name: "Book7",
+      itemName: "Book7",
       tags: ["old", "new", "hello"],
     },
     {
       key: "25trgfh5",
-      name: "Book8",
+      itemName: "Book8",
       tags: ["old", "new", "hello"],
     },
     {
       key: "2343tyhfgh56p",
-      name: "Book9",
+      itemName: "Book9",
       tags: ["old", "new", "hello"],
     },
     {
       key: "67867fhfghgf2",
-      name: "Book10",
+      itemName: "Book10",
       tags: ["old", "new", "hello"],
     },
     {
       key: "1321fgdg54wewe",
-      name: "Book11",
+      itemName: "Book11",
       tags: ["old", "new", "hello"],
     },
     {
       key: "sdf2342fsd",
-      name: "Book12",
+      itemName: "Book12",
       tags: ["old", "new", "hello"],
     },
   ];
