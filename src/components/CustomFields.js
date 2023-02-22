@@ -1,6 +1,7 @@
 import { PlusOutlined } from "@ant-design/icons";
 import { Button, Input, Select, message } from "antd";
 import { v4 as uuid } from "uuid";
+import { fieldTypesEng, fieldTypesRu } from "../constants/fieldTypes";
 
 const CustomFields = ({ fields, setFields, customFieldsLang, fieldTypes, setFieldTypes }) => {
   const field_id = uuid();
@@ -68,6 +69,7 @@ const CustomFields = ({ fields, setFields, customFieldsLang, fieldTypes, setFiel
         >
           <div style={{ marginBlock: "3px", width: "55%", flexGrow: 1 }}>
             <Input
+              defaultValue={field?.label}
               status={field?.invalid && "error"}
               onChange={(e) => handleInputChange(e, index)}
               placeholder={customFieldsLang?.inpPlaceholder}
@@ -80,6 +82,15 @@ const CustomFields = ({ fields, setFields, customFieldsLang, fieldTypes, setFiel
           </div>
           <div style={{ display: "flex", gap: "5px", marginBlock: "3px", flexGrow: 1 }}>
             <Select
+              {...(field?.type && {
+                value: {
+                  label:
+                    customFieldsLang?.fieldTypes === "eng"
+                      ? fieldTypesEng.find((item) => item.value === field?.type).label
+                      : fieldTypesRu.find((item) => item.value === field?.type).label,
+                  value: field?.type,
+                },
+              })}
               status={field?.invalid && "error"}
               style={{ minWidth: "133px" }}
               dropdownMatchSelectWidth={false}
@@ -105,3 +116,4 @@ const CustomFields = ({ fields, setFields, customFieldsLang, fieldTypes, setFiel
   );
 };
 export default CustomFields;
+//fieldTypesEng.find((item) => item.value === field?.type).label

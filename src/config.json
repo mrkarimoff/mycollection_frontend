@@ -1,5 +1,5 @@
 {
-  "baseUrl": "https://mycollectionbackend-production.up.railway.app",
+  "baseUrl": "http://localhost:4000",
   "UILanguage": {
     "eng": {
       "validateMessages": {
