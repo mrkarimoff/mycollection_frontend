@@ -1,11 +1,13 @@
 import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
 import { Button, Card, ConfigProvider, Form, Input, Typography, theme } from "antd";
+import eng from "antd/locale/en_US";
+import rus from "antd/locale/ru_RU";
 import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import { getTheme, getLanguage } from "../redux/users/users.selectors";
 import MainHeader from "../components/MainHeader";
 import { onLoginStart } from "../redux/users/users.reducer";
+import { getLanguage, getTheme } from "../redux/users/users.selectors";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -14,15 +16,6 @@ const Login = () => {
   const isDarkTheme = useSelector(getTheme());
   const uiLanguage = useSelector(getLanguage());
   const { Title } = Typography;
-  const validateMessages = {
-    required: uiLanguage?.validateMessages?.required,
-    pattern: {
-      mismatch: uiLanguage?.validateMessages?.invalid,
-    },
-    string: {
-      min: uiLanguage?.validateMessages?.min,
-    },
-  };
   // {withCredentials: true}
 
   useEffect(() => {
@@ -32,11 +25,10 @@ const Login = () => {
   const onFinish = (values) => {
     dispatch(onLoginStart({ values, navigate }));
   };
-  const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
-  };
+
   return (
     <ConfigProvider
+      locale={uiLanguage?.validateMessages === "eng" ? eng : rus}
       theme={{
         algorithm: isDarkTheme ? darkAlgorithm : defaultAlgorithm,
       }}
@@ -65,13 +57,11 @@ const Login = () => {
               }}
             >
               <Form
-                validateMessages={validateMessages}
                 layout="vertical"
                 initialValues={{
                   remember: true,
                 }}
                 onFinish={onFinish}
-                onFinishFailed={onFinishFailed}
                 autoComplete="off"
               >
                 <Form.Item

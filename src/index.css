@@ -103,6 +103,11 @@ a {
   align-items: center;
 }
 
+.ant-form-item-label > label {
+  font-size: 16px;
+  font-weight: 500;
+}
+
 @media screen and (max-width: 500px) {
   #itemRow {
     flex-direction: column;

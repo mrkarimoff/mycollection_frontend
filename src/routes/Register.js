@@ -1,12 +1,13 @@
 import { EyeInvisibleOutlined, EyeTwoTone, UserOutlined } from "@ant-design/icons";
-import { Button, Card, ConfigProvider, Form, Input, Typography, theme } from "antd";
+import { Button, Card, ConfigProvider, Form, Input, Typography, message, theme } from "antd";
 import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import { getLanguage, getTheme, getRegisterLoading } from "../redux/users/users.selectors";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 import MainHeader from "../components/MainHeader";
+import eng from "antd/locale/en_US";
+import rus from "antd/locale/ru_RU";
 import { onRegisterStart } from "../redux/users/users.reducer";
+import { getLanguage, getRegisterLoading, getTheme } from "../redux/users/users.selectors";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -16,15 +17,6 @@ const Register = () => {
   const uiLanguage = useSelector(getLanguage());
   const registerLoading = useSelector(getRegisterLoading());
   const { Title } = Typography;
-  const validateMessages = {
-    required: uiLanguage?.validateMessages?.required,
-    pattern: {
-      mismatch: uiLanguage?.validateMessages?.invalid,
-    },
-    string: {
-      min: uiLanguage?.validateMessages?.min,
-    },
-  };
 
   useEffect(() => {
     document.body.style.backgroundColor = isDarkTheme ? "#444" : "#e2e8f0";
@@ -34,11 +26,10 @@ const Register = () => {
     delete values.confirm_password;
     dispatch(onRegisterStart({ values, navigate }));
   };
-  const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
-  };
+
   return (
     <ConfigProvider
+      locale={uiLanguage?.validateMessages === "eng" ? eng : rus}
       theme={{
         algorithm: isDarkTheme ? darkAlgorithm : defaultAlgorithm,
       }}
@@ -66,13 +57,7 @@ const Register = () => {
                 padding: "8px",
               }}
             >
-              <Form
-                validateMessages={validateMessages}
-                layout="vertical"
-                onFinish={onFinish}
-                onFinishFailed={onFinishFailed}
-                autoComplete="off"
-              >
+              <Form layout="vertical" onFinish={onFinish} autoComplete="off">
                 <Form.Item
                   label={uiLanguage?.registerPage?.username?.label}
                   name={"username"}

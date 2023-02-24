@@ -2,9 +2,14 @@ import { PlusOutlined } from "@ant-design/icons";
 import { Button, Input, Select, message } from "antd";
 import { v4 as uuid } from "uuid";
 import { fieldTypesEng, fieldTypesRu } from "../constants/fieldTypes";
+import { useEffect } from "react";
 
 const CustomFields = ({ fields, setFields, customFieldsLang, fieldTypes, setFieldTypes }) => {
   const field_id = uuid();
+
+  useEffect(() => {
+    limitFieldTypes();
+  }, [fields]);
 
   function limitFieldTypes() {
     let newFieldTypes = fieldTypes;
@@ -116,4 +121,3 @@ const CustomFields = ({ fields, setFields, customFieldsLang, fieldTypes, setFiel
   );
 };
 export default CustomFields;
-//fieldTypesEng.find((item) => item.value === field?.type).label

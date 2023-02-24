@@ -1,16 +1,16 @@
+import { ExclamationCircleFilled } from "@ant-design/icons";
 import { Button, Card, Col, Modal, Row } from "antd";
 import React from "react";
 import ReactMarkdown from "react-markdown";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { getLanguage } from "../redux/users/users.selectors";
 import {
   changeCurrentCollection,
   deleteCollection,
 } from "../redux/collections/collections.reducer";
-import { ExclamationCircleFilled } from "@ant-design/icons";
+import { getLanguage } from "../redux/users/users.selectors";
 
-export default function CollectionsLayout({ data, form, setOpen, setFields, setMarkdownText }) {
+export default function CollectionsLayout({ data, form, setOpen, setFields }) {
   const dispatch = useDispatch();
   const pathname = window.location.pathname;
   const uiLanguage = useSelector(getLanguage());
@@ -40,7 +40,6 @@ export default function CollectionsLayout({ data, form, setOpen, setFields, setM
     }));
 
     setFields(nameLessCustomFields);
-    setMarkdownText(collection?.description);
     form.setFieldsValue({ collectionImg, collectionName, description, topic });
     setOpen(true);
   };

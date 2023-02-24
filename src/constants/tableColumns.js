@@ -1,5 +1,6 @@
 import { Tag } from "antd";
 import { Link } from "react-router-dom";
+import ReactMarkdown from "react-markdown";
 
 export const adminColumnsRu = [
   {
@@ -130,3 +131,55 @@ export const adminColumnsEng = [
     render: (text, record) => <Link to={`/${record.key}`}>Page</Link>,
   },
 ];
+
+export const makeCustomColums = (customFields, lang) => {
+  return customFields?.map((field) => ({
+    title: field?.label,
+    dataIndex: field?.name,
+    width:
+      field?.type === "number" || field?.type === "checkbox"
+        ? 80
+        : field?.type === "textarea"
+        ? 200
+        : 150,
+    ...(field?.type === "checkbox" && {
+      render: (value) =>
+        value ? (
+          <Tag color="green">{lang === "eng" ? "True" : "Истинный"}</Tag>
+        ) : (
+          <Tag color="red">{lang === "eng" ? "False" : "Ложный"}</Tag>
+        ),
+      filters: [
+        {
+          text: lang === "eng" ? "True values" : "Истинные значения",
+          value: true,
+        },
+        {
+          text: lang === "eng" ? "False values" : "Ложные значения",
+          value: false || null,
+        },
+      ],
+      filterMode: "tree",
+      filterSearch: true,
+      onFilter: (value, record) => record[field?.name] === value,
+    }),
+    ...(field?.type === "number" && {
+      filters: [
+        {
+          text: lang === "eng" ? "Negative numbers" : "Отрицательные числа",
+          value: false,
+        },
+        {
+          text: lang === "eng" ? "Positive numbers" : "Положительные числа",
+          value: true,
+        },
+      ],
+      filterMode: "tree",
+      filterSearch: true,
+      onFilter: (value, record) => value === record[field?.name] >= 0,
+    }),
+    ...(field?.type === "textarea" && {
+      render: (value) => <ReactMarkdown>{value}</ReactMarkdown>,
+    }),
+  }));
+};

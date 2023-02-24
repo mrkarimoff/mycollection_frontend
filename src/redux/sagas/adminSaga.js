@@ -37,7 +37,6 @@ function* workUpdateUsers({ payload }) {
 }
 
 function* workDeleteUsers({ payload }) {
-  console.log(payload.ids);
   try {
     const response = yield axios.delete(config.baseUrl + "/api/admin/users", {
       params: { ids: payload.ids },

@@ -1,12 +1,9 @@
 {
-  "baseUrl": "https://mycollectionbackend-production.up.railway.app",
+  "baseUrl": "http://localhost:4000",
   "UILanguage": {
     "eng": {
-      "validateMessages": {
-        "required": "${name} is required!",
-        "invalid": "${name} is invalid!",
-        "min": "${name} must be at least ${min} characters"
-      },
+      "validateMessages": "eng",
+      "authMessages": { "loggedIn": "Logged in successfully" },
       "mainPage": {
         "searchPlaceholder": "Search through site",
         "accountBtn": "Account",
@@ -14,6 +11,7 @@
         "myCollectionsBtn": "My collections",
         "myAccountBtn": "Account",
         "logoutBtn": "Log out",
+        "adminPanelBtn": "Admin Panel",
         "section1": "Popular Tags",
         "section2": "Biggest Collections",
         "section3": "Recent Items"
@@ -131,11 +129,8 @@
     },
 
     "rus": {
-      "validateMessages": {
-        "required": "${name} обязательно!",
-        "invalid": "${name} недействительно!",
-        "min": "${name} имя должно быть не менее ${min} символов"
-      },
+      "validateMessages": "ru",
+      "authMessages": { "loggedIn": "Вы успешно вошли в систему" },
       "mainPage": {
         "searchPlaceholder": "Поиск по сайту",
         "accountBtn": "Профиль",
@@ -143,6 +138,7 @@
         "myCollectionsBtn": "Мои коллекции",
         "myAccountBtn": "Профиль",
         "logoutBtn": "Выйти",
+        "adminPanelBtn": "Панель администратора",
         "section1": "Популярные Теги",
         "section2": "Самые большие коллекции",
         "section3": "Последние Предметы"
