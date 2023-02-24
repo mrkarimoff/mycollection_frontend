@@ -32,7 +32,6 @@ function* workCreateCollection({ payload }) {
     yield uploadBytes(imagesRef, payload?.collectionImg);
     imgUrl = yield getDownloadURL(imagesRef);
   }
-  console.log({ ...payload, collectionImg: { imgUrl, imgName } });
 
   try {
     yield axios.post(

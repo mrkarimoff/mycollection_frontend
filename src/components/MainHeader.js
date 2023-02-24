@@ -47,7 +47,7 @@ const MainHeader = () => {
       key: "2",
       label: (
         <Button onClick={() => navigate(`/admin-panel`)} type="ghost">
-          Admin Panel
+          {uiLanguage?.mainPage?.adminPanelBtn}
         </Button>
       ),
     },

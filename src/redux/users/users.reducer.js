@@ -45,10 +45,10 @@ const usersSlice = createSlice({
       state.registerLoading = false;
     },
     onLoginStart: () => {},
-    onLoginSuccess: (_, { payload }) => {
+    onLoginSuccess: (state, { payload }) => {
       setLocalToken(payload.data);
       setLocalRole(payload.role);
-      message.success(payload.message);
+      message.success(state.UILanguage.authMessages.loggedIn);
       setLocalUsername(payload.username);
     },
     onLoginFail: (_, { payload }) => {

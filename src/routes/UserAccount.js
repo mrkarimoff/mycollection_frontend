@@ -1,19 +1,19 @@
+import { Button, ConfigProvider, Form, Input, Select, message, theme } from "antd";
+import Title from "antd/es/typography/Title";
+import eng from "antd/locale/en_US";
+import rus from "antd/locale/ru_RU";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getLanguage, getTheme } from "../redux/users/users.selectors";
-import { Button, ConfigProvider, Form, Input, Select, message, theme } from "antd";
-import MainHeader from "../components/MainHeader";
-import Wrapper from "../components/Wrapper";
-import Title from "antd/es/typography/Title";
+import { useNavigate } from "react-router-dom";
 import CollectionsLayout from "../components/CollectionsLayout";
+import CustomFields from "../components/CustomFields";
+import MainHeader from "../components/MainHeader";
 import ModalDialog from "../components/ModalDialog";
 import TextareaMarkdown from "../components/TextareaMarkdown";
 import UploadImage from "../components/UploadImage";
-import { topicsEng, topicsRu } from "../constants/topics";
-import CustomFields from "../components/CustomFields";
+import Wrapper from "../components/Wrapper";
 import { fieldTypesEng, fieldTypesRu } from "../constants/fieldTypes";
-import { getLocalRole, getLocalToken, getLocalUsername } from "../utils/localStorage.service";
-import { useNavigate } from "react-router-dom";
+import { topicsEng, topicsRu } from "../constants/topics";
 import {
   changeCurrentCollection,
   createCollection,
@@ -24,6 +24,8 @@ import {
   getCollectionEntities,
   getCurrentCollection,
 } from "../redux/collections/collections.selectors";
+import { getLanguage, getTheme } from "../redux/users/users.selectors";
+import { getLocalRole, getLocalToken, getLocalUsername } from "../utils/localStorage.service";
 
 const UserAccount = () => {
   const navigate = useNavigate();
@@ -46,14 +48,7 @@ const UserAccount = () => {
       : fieldTypesRu
   );
   const [fileList, setFileList] = useState([]);
-  const [markdownText, setMarkdownText] = useState("");
   const [form] = Form.useForm();
-  const validateMessages = {
-    required: uiLanguage?.validateMessages?.required,
-    string: {
-      min: uiLanguage?.validateMessages?.min,
-    },
-  };
 
   useEffect(() => {
     setFieldTypes(
@@ -94,24 +89,18 @@ const UserAccount = () => {
     if (isFieldsValid) {
       if (currentCollection === "") {
         // Create Collection
-        const newValues = { ...values, customFields: fields, urlParams };
-        setConfirmLoading(true);
-        dispatch(createCollection(newValues));
-        setTimeout(() => {
-          emptyForm();
-          message.success(uiLanguage?.userAccount?.formElements?.submitSuccessMsg);
-        }, 1500);
+        dispatch(createCollection({ ...values, customFields: fields, urlParams }));
       } else {
         // Update Collection
-        setConfirmLoading(true);
         dispatch(
           updateCollection({ ...values, customFields: fields, urlParams, currentCollection })
         );
-        setTimeout(() => {
-          emptyForm();
-          message.success(uiLanguage?.userAccount?.formElements?.submitSuccessMsg);
-        }, 1500);
       }
+      setConfirmLoading(true);
+      setTimeout(() => {
+        emptyForm();
+        message.success(uiLanguage?.userAccount?.formElements?.submitSuccessMsg);
+      }, 1500);
     } else {
       message.error(uiLanguage?.userAccount?.formElements?.submitFailsMsg);
     }
@@ -134,11 +123,11 @@ const UserAccount = () => {
         ? fieldTypesEng
         : fieldTypesRu
     );
-    setMarkdownText("");
   };
 
   return (
     <ConfigProvider
+      locale={uiLanguage?.validateMessages === "eng" ? eng : rus}
       theme={{
         algorithm: isDarkTheme ? darkAlgorithm : defaultAlgorithm,
         token: {
@@ -154,7 +143,6 @@ const UserAccount = () => {
         >
           <Form
             form={form}
-            validateMessages={validateMessages}
             layout="vertical"
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
@@ -205,12 +193,12 @@ const UserAccount = () => {
             </Form.Item>
 
             <TextareaMarkdown
+              form={form}
               label={uiLanguage?.userAccount?.formElements?.textareaMarkdown?.label}
               name={"description"}
               placeholder={uiLanguage?.userAccount?.formElements?.textareaMarkdown?.placeholder}
               tab1={uiLanguage?.userAccount?.formElements?.textareaMarkdown?.tab1}
               tab2={uiLanguage?.userAccount?.formElements?.textareaMarkdown?.tab2}
-              {...{ markdownText, setMarkdownText }}
               rules={[
                 {
                   required: true,
@@ -251,10 +239,7 @@ const UserAccount = () => {
           </Button>
         </div>
 
-        <CollectionsLayout
-          {...{ form, setOpen, setFields, setMarkdownText }}
-          data={collectionEntities}
-        />
+        <CollectionsLayout {...{ form, setOpen, setFields }} data={collectionEntities} />
       </Wrapper>
     </ConfigProvider>
   );

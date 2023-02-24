@@ -5,9 +5,7 @@ const ItemsTable = ({ columns, rowSelection, data, onTableChange, pagination }) 
     <div>
       <Table
         pagination={pagination}
-        scroll={{
-          x: 1100,
-        }}
+        scroll={{ x: "max-content" }}
         columns={columns}
         dataSource={data}
         onChange={onTableChange}

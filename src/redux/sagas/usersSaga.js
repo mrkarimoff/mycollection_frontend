@@ -25,9 +25,9 @@ function* workRegister({ payload }) {
 function* workLogin({ payload }) {
   try {
     const {
-      data: { username, data, message, role },
+      data: { username, data, role },
     } = yield axios.post(config.baseUrl + "/api/auth/login", payload.values);
-    yield put(onLoginSuccess({ data, message, username, role }));
+    yield put(onLoginSuccess({ data, username, role }));
     role === "Admin" ? payload.navigate(`/admin-panel`) : payload.navigate(`/${username}`);
   } catch (error) {
     yield put(onLoginFail(error?.response?.data?.message));
