@@ -3,7 +3,7 @@ import { message } from "antd";
 
 const initialState = {
   userEntities: [],
-  userLoading: false,
+  userLoading: true,
 };
 
 const adminSlice = createSlice({
@@ -11,14 +11,13 @@ const adminSlice = createSlice({
   initialState: initialState,
   reducers: {
     getUsers: (state) => {
-      state.userLoading = false;
+      state.userLoading = true;
     },
     getUsersSuccess: (state, action) => {
       state.userEntities = action.payload;
       state.userLoading = false;
     },
     getUsersFail: (state, action) => {
-      state.userLoading = false;
       message.error(action.payload);
     },
     updateUsers: () => {},

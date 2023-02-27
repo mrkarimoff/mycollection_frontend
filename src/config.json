@@ -2,8 +2,16 @@
   "baseUrl": "http://localhost:4000",
   "UILanguage": {
     "eng": {
+      "msg404": { "msg": "Sorry, the page you visited does not exist", "btn": "Back Home" },
+      "greeting": "Welcome",
       "validateMessages": "eng",
       "authMessages": { "loggedIn": "Logged in successfully" },
+      "customFieldPlaceholder": "Enter",
+      "searchPage": {
+        "foundCols": "Found Collections",
+        "foundItems": "Found Items",
+        "noResult": "No Search Results"
+      },
       "mainPage": {
         "searchPlaceholder": "Search through site",
         "accountBtn": "Account",
@@ -12,7 +20,7 @@
         "myAccountBtn": "Account",
         "logoutBtn": "Log out",
         "adminPanelBtn": "Admin Panel",
-        "section1": "Popular Tags",
+        "section1": "Item Tags",
         "section2": "Biggest Collections",
         "section3": "Recent Items"
       },
@@ -80,6 +88,10 @@
         }
       },
       "userAccount": {
+        "warningMsg": {
+          "title": "Do you really want to delete this collection?",
+          "content": "If you delete it, all items in it will be deleted as well!"
+        },
         "title": "My Collections",
         "addCollectionBtn": "Add Collection",
         "submitBtn": "Submit",
@@ -129,8 +141,19 @@
     },
 
     "rus": {
+      "msg404": {
+        "msg": "Извините, страница, которую вы посетили, не существует",
+        "btn": "Домой"
+      },
+      "greeting": "Добро пожаловать",
       "validateMessages": "ru",
       "authMessages": { "loggedIn": "Вы успешно вошли в систему" },
+      "customFieldPlaceholder": "Введите",
+      "searchPage": {
+        "foundCols": "Найденные коллекции",
+        "foundItems": "Найденные предметы",
+        "noResult": "Нет Результатов Поиска"
+      },
       "mainPage": {
         "searchPlaceholder": "Поиск по сайту",
         "accountBtn": "Профиль",
@@ -139,7 +162,7 @@
         "myAccountBtn": "Профиль",
         "logoutBtn": "Выйти",
         "adminPanelBtn": "Панель администратора",
-        "section1": "Популярные Теги",
+        "section1": "Теги предметов",
         "section2": "Самые большие коллекции",
         "section3": "Последние Предметы"
       },
@@ -207,6 +230,10 @@
         }
       },
       "userAccount": {
+        "warningMsg": {
+          "title": "Вы действительно хотите удалить эту коллекцию?",
+          "content": "Если вы удалите его, все элементы в нем также будут удалены!"
+        },
         "title": "Мои коллекции",
         "addCollectionBtn": "Добавить коллекцию",
         "submitBtn": "Сохранять",

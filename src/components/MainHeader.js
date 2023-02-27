@@ -4,18 +4,21 @@ import { Header } from "antd/es/layout/layout";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import config from "../config.json";
+import { updateSearchValue } from "../redux/search/search.reducer";
+import { getSearchValue } from "../redux/search/search.selectors";
 import { changeLanguage, setDefaultLang, toggleTheme } from "../redux/users/users.reducer";
 import { getDefaultLang, getLanguage, getTheme } from "../redux/users/users.selectors";
 import {
-  getLocalUsername,
-  getLocalToken,
   getLocalRole,
+  getLocalToken,
+  getLocalUsername,
   removeAuthDetails,
 } from "../utils/localStorage.service";
 
 const MainHeader = () => {
   const dispatch = useDispatch();
   const username = getLocalUsername();
+  const searchValue = useSelector(getSearchValue());
   const role = getLocalRole();
   const token = getLocalToken();
   const siteTheme = useSelector(getTheme());
@@ -100,9 +103,13 @@ const MainHeader = () => {
 
         <div id="searchBar" style={{ display: generalPages.includes(pathName) && "none" }}>
           <Search
+            {...(pathName === "/search-page" && { defaultValue: searchValue })}
             size="large"
             placeholder={uiLanguage?.mainPage?.searchPlaceholder}
-            onSearch={() => console.log("hello")}
+            onSearch={(val) => {
+              navigate("/search-page");
+              dispatch(updateSearchValue(val));
+            }}
             enterButton
           />
         </div>

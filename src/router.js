@@ -7,6 +7,7 @@ import Login from "./routes/Login";
 import Register from "./routes/Register";
 import UserAccount from "./routes/UserAccount";
 import AdminPanel from "./routes/AdminPanel";
+import SearchResult from "./routes/SearchResult";
 
 const router = createBrowserRouter([
   {
@@ -42,6 +43,11 @@ const router = createBrowserRouter([
   {
     path: "/items/:itemId",
     element: <Item />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/search-page",
+    element: <SearchResult />,
     errorElement: <ErrorPage />,
   },
 ]);

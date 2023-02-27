@@ -1,6 +1,9 @@
-import { Button } from "antd";
+import { Button, Tag } from "antd";
 import Title from "antd/es/typography/Title";
 import Carousel from "better-react-carousel";
+import { updateSearchValue } from "../redux/search/search.reducer";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const style = {
   display: "flex",
@@ -14,6 +17,8 @@ const style = {
 };
 
 const TagsCarousel = ({ data }) => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const containerStyle = { paddingBlock: "7px" };
   const responsive = [
     {
@@ -22,19 +27,19 @@ const TagsCarousel = ({ data }) => {
     },
     {
       breakpoint: 560,
+      cols: 2,
+    },
+    {
+      breakpoint: 850,
       cols: 3,
     },
     {
-      breakpoint: 740,
-      cols: 4,
-    },
-    {
       breakpoint: 915,
-      cols: 5,
+      cols: 3,
     },
     {
       breakpoint: 1115,
-      cols: 6,
+      cols: 4,
     },
   ];
   return (
@@ -44,15 +49,22 @@ const TagsCarousel = ({ data }) => {
         responsiveLayout={responsive}
         containerStyle={containerStyle}
         mobileBreakpoint={225}
-        cols={8}
+        cols={5}
         rows={1}
         gap={"10px"}
         loop
       >
-        {data?.map((item, index) => (
-          <Carousel.Item key={index}>
-            <Button style={style}>
-              <Title level={5}>{item}</Title>
+        {data?.map((item) => (
+          <Carousel.Item key={item._id}>
+            <Button
+              onClick={() => {
+                navigate("/search-page");
+                dispatch(updateSearchValue(item.name));
+              }}
+              type="dashed"
+              style={style}
+            >
+              <Title level={5}>{item.name}</Title>
             </Button>
           </Carousel.Item>
         ))}

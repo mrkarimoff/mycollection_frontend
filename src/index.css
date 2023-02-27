@@ -108,7 +108,7 @@ a {
   font-weight: 500;
 }
 
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 600px) {
   #itemRow {
     flex-direction: column;
     align-items: flex-start;
@@ -123,6 +123,62 @@ a {
   padding: 5px;
   font-weight: 500;
   border-radius: 10px;
+}
+
+.count {
+  text-align: center;
+  background-color: #13c2c2;
+  min-width: 30px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 5px;
+  font-weight: 500;
+  border-radius: 5px;
+}
+
+#itemSpace {
+  display: flex;
+  width: 700px;
+}
+
+#row {
+  display: flex;
+  gap: 40px;
+  padding-left: 10px;
+}
+
+.noResult {
+  text-align: center;
+}
+
+.noResult .noResult-img {
+  width: 400px;
+}
+
+@media screen and (max-width: 420px) {
+  .noResult .noResult-img {
+    width: 250px;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  #row {
+    gap: 5px;
+    flex-direction: column;
+  }
+}
+
+@media screen and (max-width: 770px) {
+  #itemSpace {
+    width: 600px;
+  }
+}
+
+@media screen and (max-width: 690px) {
+  #itemSpace {
+    width: unset;
+  }
 }
 
 .collectionPic {

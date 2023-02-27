@@ -7,6 +7,9 @@ import { getLocalToken } from "../../utils/localStorage.service";
 import {
   createCollection,
   deleteCollection,
+  getBiggestCollections,
+  getBiggestCollectionsFail,
+  getBiggestCollectionsSuccess,
   getCollections,
   getCollectionsFail,
   getCollectionsSuccess,
@@ -18,7 +21,11 @@ function* workGetCollection({ payload }) {
     const response = yield axios.get(config.baseUrl + `/api/collections/${payload}`, {
       headers: { Authorization: `Bearer ${getLocalToken()}` },
     });
-    yield put(getCollectionsSuccess(response.data));
+    const countedCols = response?.data?.collections?.map((col) => ({
+      ...col,
+      itemNumb: response?.data?.countCols?.find((item) => item._id === col._id)?.count ?? 0,
+    }));
+    yield put(getCollectionsSuccess(countedCols));
   } catch (error) {
     yield put(getCollectionsFail(error?.response?.data?.message));
   }
@@ -74,7 +81,6 @@ function* workUpdateCollection({ payload }) {
   const colId = payload?.currentCollection?.id;
   delete payload.currentCollection;
   const updatedData = { ...payload, collectionImg: { imgUrl, imgName } };
-  console.log(updatedData);
 
   try {
     yield axios.put(config.baseUrl + `/api/collections/${colId}`, updatedData, {
@@ -86,11 +92,27 @@ function* workUpdateCollection({ payload }) {
   }
 }
 
+function* workGetBiggestCollections() {
+  try {
+    const response = yield axios.get(config.baseUrl + `/api/collections/count/biggest`, {
+      headers: { Authorization: `Bearer ${getLocalToken()}` },
+    });
+    const biggestCollections = response?.data.collections.map((col) => ({
+      ...col,
+      itemNumb: response?.data.mostRepeatedCols.find((item) => item._id === col._id).count,
+    }));
+    yield put(getBiggestCollectionsSuccess(biggestCollections));
+  } catch (error) {
+    yield put(getBiggestCollectionsFail(error?.response?.data?.message));
+  }
+}
+
 function* collectionsSaga() {
   yield takeLatest(createCollection.type, workCreateCollection);
   yield takeLatest(getCollections.type, workGetCollection);
   yield takeLatest(deleteCollection.type, workDeleteCollection);
   yield takeLatest(updateCollection.type, workUpdateCollection);
+  yield takeLatest(getBiggestCollections.type, workGetBiggestCollections);
 }
 
 export default collectionsSaga;

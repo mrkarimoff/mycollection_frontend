@@ -4,6 +4,8 @@ import { message } from "antd";
 const initialState = {
   collectionEntities: [],
   currentCollection: "",
+  biggestCollectionEntities: [],
+  collectionsLoading: true,
 };
 
 const collectionsSlice = createSlice({
@@ -13,6 +15,7 @@ const collectionsSlice = createSlice({
     createCollection: () => {},
     getCollections: () => {},
     getCollectionsSuccess: (state, action) => {
+      state.collectionsLoading = false;
       state.collectionEntities = action.payload;
     },
     getCollectionsFail: (_, { payload }) => {
@@ -23,6 +26,13 @@ const collectionsSlice = createSlice({
       state.currentCollection = action.payload;
     },
     updateCollection: () => {},
+    getBiggestCollections: () => {},
+    getBiggestCollectionsSuccess: (state, action) => {
+      state.biggestCollectionEntities = action.payload;
+    },
+    getBiggestCollectionsFail: (_, action) => {
+      message.error(action.payload);
+    },
   },
 });
 
@@ -35,6 +45,9 @@ export const {
   deleteCollection,
   changeCurrentCollection,
   updateCollection,
+  getBiggestCollections,
+  getBiggestCollectionsSuccess,
+  getBiggestCollectionsFail,
 } = collectionsSlice.actions;
 
 export default collectionsReducer;

@@ -18,9 +18,9 @@ export default function CollectionsLayout({ data, form, setOpen, setFields }) {
 
   const deleteCol = (payload) => {
     modal.confirm({
-      title: "Do you really want to delete this collection?",
+      title: uiLanguage?.userAccount?.warningMsg?.title,
       icon: <ExclamationCircleFilled />,
-      content: "If you delete it, all items in it will be deleted as well!",
+      content: uiLanguage?.userAccount?.warningMsg?.content,
       onOk() {
         dispatch(deleteCollection(payload));
       },
@@ -59,7 +59,7 @@ export default function CollectionsLayout({ data, form, setOpen, setFields }) {
               cursor: "default",
             }}
             actions={
-              pathname === "/"
+              pathname === "/" || pathname === "/search-page"
                 ? null
                 : [
                     <Button onClick={() => editCol(collection)}>
@@ -80,6 +80,7 @@ export default function CollectionsLayout({ data, form, setOpen, setFields }) {
             }
           >
             <div className="topic">{collection?.topic}</div>
+            <div className="count">{collection?.itemNumb}</div>
             <Link to={`/collections/${collection?._id}`}>
               {collection?.collectionImg?.imgUrl && (
                 <div

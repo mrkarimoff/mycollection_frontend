@@ -13,6 +13,12 @@ import {
   getItemsFail,
   deleteItem,
   updateItem,
+  getRecentItems,
+  getRecentItemsSuccess,
+  getRecentItemsFail,
+  getSingleItem,
+  getSingleItemSuccess,
+  getSingleItemFail,
 } from "../items/items.reducer";
 import config from "../../config.json";
 import { getLocalToken } from "../../utils/localStorage.service";
@@ -42,9 +48,7 @@ function* workCreateItem({ payload }) {
 
 function* workGetAllTags() {
   try {
-    const response = yield axios.get(config.baseUrl + `/api/tags`, {
-      headers: { Authorization: `Bearer ${getLocalToken()}` },
-    });
+    const response = yield axios.get(config.baseUrl + `/api/tags`);
     yield put(getAllTagsSuccess(response?.data));
   } catch (error) {
     yield put(getAllTagsFail(error?.response?.data?.message));
@@ -53,12 +57,21 @@ function* workGetAllTags() {
 
 function* workGetItems({ payload }) {
   try {
-    const response = yield axios.get(config.baseUrl + `/api/collections/${payload}/items`, {
-      headers: { Authorization: `Bearer ${getLocalToken()}` },
-    });
+    const response = yield axios.get(config.baseUrl + `/api/collections/${payload}/items`);
     yield put(getItemsSuccess(response?.data));
   } catch (error) {
     yield put(getItemsFail(error?.response?.data?.message));
+  }
+}
+
+function* workGetRecentItems() {
+  try {
+    const response = yield axios.get(config.baseUrl + `/api/items/recent`, {
+      headers: { Authorization: `Bearer ${getLocalToken()}` },
+    });
+    yield put(getRecentItemsSuccess(response?.data));
+  } catch (error) {
+    yield put(getRecentItemsFail(error?.response?.data?.message));
   }
 }
 
@@ -88,13 +101,24 @@ function* workUpdateItem({ payload }) {
   }
 }
 
+function* workGetSingleItem({ payload }) {
+  try {
+    const response = yield axios.get(config.baseUrl + `/api/items/${payload}`);
+    yield put(getSingleItemSuccess(response?.data));
+  } catch (error) {
+    yield put(getSingleItemFail(error?.response?.data?.message));
+  }
+}
+
 function* itemsSaga() {
   yield takeLatest(getCollectionData.type, workGetCollectionData);
   yield takeLatest(createItem.type, workCreateItem);
   yield takeLatest(getAllTags.type, workGetAllTags);
   yield takeLatest(getItems.type, workGetItems);
+  yield takeLatest(getRecentItems.type, workGetRecentItems);
   yield takeLatest(deleteItem.type, workDeleteItem);
   yield takeLatest(updateItem.type, workUpdateItem);
+  yield takeLatest(getSingleItem.type, workGetSingleItem);
 }
 
 export default itemsSaga;

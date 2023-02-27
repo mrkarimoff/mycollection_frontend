@@ -7,6 +7,11 @@ const initialState = {
   collectionName: "",
   tags: [],
   currentItem: "",
+  recentItems: [],
+  itemsLoading: true,
+  canManage: false,
+  singleItemLoading: true,
+  singleItemEntities: [],
 };
 
 const itemsSlice = createSlice({
@@ -17,6 +22,7 @@ const itemsSlice = createSlice({
     getCollectionDataSuccess: (state, action) => {
       state.customFields = action.payload.customFields;
       state.collectionName = action.payload.collectionName;
+      state.canManage = action.payload.canManage;
     },
     getCollectionDataFail: (_, action) => {
       message.error(action.payload);
@@ -32,6 +38,7 @@ const itemsSlice = createSlice({
     getItems: () => {},
     getItemsSuccess: (state, action) => {
       state.itemEntities = action.payload;
+      state.itemsLoading = false;
     },
     getItemsFail: (_, action) => {
       message.error(action.payload);
@@ -41,6 +48,24 @@ const itemsSlice = createSlice({
       state.currentItem = action.payload;
     },
     updateItem: () => {},
+    getRecentItems: (state) => {
+      state.itemsLoading = true;
+    },
+    getRecentItemsSuccess: (state, action) => {
+      state.recentItems = action.payload;
+      state.itemsLoading = false;
+    },
+    getRecentItemsFail: (_, action) => {
+      message.error(action.payload);
+    },
+    getSingleItem: () => {},
+    getSingleItemSuccess: (state, action) => {
+      state.singleItemLoading = false;
+      state.singleItemEntities = action.payload;
+    },
+    getSingleItemFail: (_, action) => {
+      message.error(action.payload);
+    },
   },
 });
 
@@ -59,6 +84,12 @@ export const {
   deleteItem,
   updateCurrentItem,
   updateItem,
+  getRecentItems,
+  getRecentItemsSuccess,
+  getRecentItemsFail,
+  getSingleItem,
+  getSingleItemSuccess,
+  getSingleItemFail,
 } = itemsSlice.actions;
 
 export default itemsReducer;

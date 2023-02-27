@@ -1,8 +1,8 @@
 import { RightCircleFilled } from "@ant-design/icons";
-import { Card, Col, Row, Space, Typography } from "antd";
+import { Card, Col, Row, Space, Tag, Typography } from "antd";
 import { Link } from "react-router-dom";
 
-const MainItems = () => {
+const MainItems = ({ data }) => {
   const { Text, Title } = Typography;
   return (
     <Card loading={false}>
@@ -13,51 +13,28 @@ const MainItems = () => {
           display: "flex",
         }}
       >
-        <Card style={{ cursor: "default" }} hoverable type="inner">
-          <Row id="itemRow">
-            <Col>
-              <Text style={{ fontWeight: 400 }}>18.02.2023</Text>
-            </Col>
-            <Col>
-              <Title level={4}>The book of Vishanti</Title>
-            </Col>
-            <Col>
-              <Link to={"/items/1"}>
-                <RightCircleFilled style={{ fontSize: "28px" }} />
-              </Link>
-            </Col>
-          </Row>
-        </Card>
-        <Card style={{ cursor: "default" }} hoverable type="inner">
-          <Row id="itemRow">
-            <Col>
-              <Text style={{ fontWeight: 400 }}>02.02.2023</Text>
-            </Col>
-            <Col>
-              <Title level={4}>Gold medal</Title>
-            </Col>
-            <Col>
-              <Link to={"/items/2"}>
-                <RightCircleFilled style={{ fontSize: "28px" }} />
-              </Link>
-            </Col>
-          </Row>
-        </Card>
-        <Card style={{ cursor: "default" }} hoverable type="inner">
-          <Row id="itemRow">
-            <Col>
-              <Text style={{ fontWeight: 400 }}>06.06.1999</Text>
-            </Col>
-            <Col>
-              <Title level={4}>Special stamp</Title>
-            </Col>
-            <Col>
-              <Link to={"/items/3"}>
-                <RightCircleFilled style={{ fontSize: "28px" }} />
-              </Link>
-            </Col>
-          </Row>
-        </Card>
+        {data?.map((item) => (
+          <Card key={item._id} style={{ cursor: "default" }} hoverable type="inner">
+            <Row id="itemRow">
+              <Col>
+                <Text style={{ fontWeight: 400 }}>{item.itemDate}</Text>
+              </Col>
+              <Col>
+                <Title level={4}>{item.itemName}</Title>
+                {item.tags?.map((tag, i) => (
+                  <Tag style={{ marginBlock: "3px" }} key={i}>
+                    {tag}
+                  </Tag>
+                ))}
+              </Col>
+              <Col style={{ marginTop: "7px" }}>
+                <Link to={`/items/${item._id}`}>
+                  <RightCircleFilled style={{ fontSize: "28px" }} />
+                </Link>
+              </Col>
+            </Row>
+          </Card>
+        ))}
       </Space>
     </Card>
   );

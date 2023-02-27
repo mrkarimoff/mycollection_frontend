@@ -156,7 +156,7 @@ export const makeCustomColums = (customFields, lang) => {
         },
         {
           text: lang === "eng" ? "False values" : "Ложные значения",
-          value: false || null,
+          value: false,
         },
       ],
       filterMode: "tree",
