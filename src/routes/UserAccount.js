@@ -22,10 +22,12 @@ import {
 } from "../redux/collections/collections.reducer";
 import {
   getCollectionEntities,
+  getCollectionsLoading,
   getCurrentCollection,
 } from "../redux/collections/collections.selectors";
 import { getLanguage, getTheme } from "../redux/users/users.selectors";
 import { getLocalRole, getLocalToken, getLocalUsername } from "../utils/localStorage.service";
+import Loader from "../components/Loader";
 
 const UserAccount = () => {
   const navigate = useNavigate();
@@ -38,6 +40,7 @@ const UserAccount = () => {
   const role = getLocalRole();
   const username = getLocalUsername();
   const uiLanguage = useSelector(getLanguage());
+  const collectionsLoading = useSelector(getCollectionsLoading());
   const { defaultAlgorithm, darkAlgorithm } = theme;
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
@@ -136,111 +139,118 @@ const UserAccount = () => {
       }}
     >
       <MainHeader />
-      <Wrapper style={{ marginBottom: "20px" }}>
-        <ModalDialog
-          title={uiLanguage?.userAccount?.formElements?.modalTitle}
-          {...{ open, setOpen, onCancel: emptyForm }}
-        >
-          <Form
-            form={form}
-            layout="vertical"
-            onFinish={onFinish}
-            onFinishFailed={onFinishFailed}
-            autoComplete="off"
+      {collectionsLoading ? (
+        <Loader />
+      ) : (
+        <Wrapper style={{ marginBottom: "20px" }}>
+          <ModalDialog
+            title={uiLanguage?.userAccount?.formElements?.modalTitle}
+            {...{ open, setOpen, onCancel: emptyForm }}
           >
-            <UploadImage
-              {...{ fileList, setFileList, form }}
-              uploadImageLang={uiLanguage?.userAccount?.formElements?.collectionImg}
-            />
-            <Form.Item
-              label={uiLanguage?.userAccount?.formElements?.collectionName?.label}
-              name={"collectionName"}
-              rules={[
-                {
-                  required: true,
-                },
-                {
-                  type: "string",
-                  min: 6,
-                },
-              ]}
-            >
-              <Input
-                placeholder={uiLanguage?.userAccount?.formElements?.collectionName?.placeholder}
-              />
-            </Form.Item>
-            <Form.Item
-              label={uiLanguage?.userAccount?.formElements?.topic?.label}
-              name={"topic"}
-              rules={[
-                {
-                  required: true,
-                },
-              ]}
-            >
-              <Select
-                showSearch={"single"}
-                style={{
-                  width: "100%",
-                }}
-                placeholder={uiLanguage?.userAccount?.formElements?.topic?.placeholder}
-                options={
-                  uiLanguage?.userAccount?.formElements?.topic?.topics === "eng"
-                    ? topicsEng
-                    : topicsRu
-                }
-              />
-            </Form.Item>
-
-            <TextareaMarkdown
+            <Form
               form={form}
-              label={uiLanguage?.userAccount?.formElements?.textareaMarkdown?.label}
-              name={"description"}
-              placeholder={uiLanguage?.userAccount?.formElements?.textareaMarkdown?.placeholder}
-              tab1={uiLanguage?.userAccount?.formElements?.textareaMarkdown?.tab1}
-              tab2={uiLanguage?.userAccount?.formElements?.textareaMarkdown?.tab2}
-              rules={[
-                {
-                  required: true,
-                },
-                {
-                  type: "string",
-                  min: 20,
-                },
-              ]}
-            />
-            <hr />
-            <CustomFields
-              {...{ fields, setFields, fieldTypes, setFieldTypes }}
-              customFieldsLang={uiLanguage?.userAccount?.formElements?.customFields}
-            />
-            <Form.Item style={{ margin: 0, marginTop: "20px" }}>
-              <Button
-                loading={confirmLoading}
-                style={{ width: "100%" }}
-                type="primary"
-                htmlType="submit"
+              layout="vertical"
+              onFinish={onFinish}
+              onFinishFailed={onFinishFailed}
+              autoComplete="off"
+            >
+              <UploadImage
+                {...{ fileList, setFileList, form }}
+                uploadImageLang={uiLanguage?.userAccount?.formElements?.collectionImg}
+              />
+              <Form.Item
+                label={uiLanguage?.userAccount?.formElements?.collectionName?.label}
+                name={"collectionName"}
+                rules={[
+                  {
+                    required: true,
+                  },
+                  {
+                    type: "string",
+                    min: 6,
+                  },
+                ]}
               >
-                {uiLanguage?.userAccount?.submitBtn}
-              </Button>
-            </Form.Item>
-          </Form>
-        </ModalDialog>
+                <Input
+                  placeholder={uiLanguage?.userAccount?.formElements?.collectionName?.placeholder}
+                />
+              </Form.Item>
+              <Form.Item
+                label={uiLanguage?.userAccount?.formElements?.topic?.label}
+                name={"topic"}
+                rules={[
+                  {
+                    required: true,
+                  },
+                ]}
+              >
+                <Select
+                  showSearch={"single"}
+                  style={{
+                    width: "100%",
+                  }}
+                  placeholder={uiLanguage?.userAccount?.formElements?.topic?.placeholder}
+                  options={
+                    uiLanguage?.userAccount?.formElements?.topic?.topics === "eng"
+                      ? topicsEng
+                      : topicsRu
+                  }
+                />
+              </Form.Item>
 
-        <div style={{ marginBlock: "20px", textAlign: "center" }}>
-          <Title level={2}>{uiLanguage?.userAccount?.title}</Title>
-          <Button
-            size="large"
-            style={{ marginBottom: "10px", width: "25%", minWidth: "220px" }}
-            type="primary"
-            onClick={() => setOpen(true)}
-          >
-            {uiLanguage?.userAccount?.addCollectionBtn}
-          </Button>
-        </div>
+              <TextareaMarkdown
+                form={form}
+                label={uiLanguage?.userAccount?.formElements?.textareaMarkdown?.label}
+                name={"description"}
+                placeholder={uiLanguage?.userAccount?.formElements?.textareaMarkdown?.placeholder}
+                tab1={uiLanguage?.userAccount?.formElements?.textareaMarkdown?.tab1}
+                tab2={uiLanguage?.userAccount?.formElements?.textareaMarkdown?.tab2}
+                rules={[
+                  {
+                    required: true,
+                  },
+                  {
+                    type: "string",
+                    min: 20,
+                  },
+                ]}
+              />
+              <hr />
+              <CustomFields
+                {...{ fields, setFields, fieldTypes, setFieldTypes }}
+                customFieldsLang={uiLanguage?.userAccount?.formElements?.customFields}
+              />
+              <Form.Item style={{ margin: 0, marginTop: "20px" }}>
+                <Button
+                  loading={confirmLoading}
+                  style={{ width: "100%" }}
+                  type="primary"
+                  htmlType="submit"
+                >
+                  {uiLanguage?.userAccount?.submitBtn}
+                </Button>
+              </Form.Item>
+            </Form>
+          </ModalDialog>
 
-        <CollectionsLayout {...{ form, setOpen, setFields }} data={collectionEntities} />
-      </Wrapper>
+          <Title style={{ textAlign: "center" }} level={3}>
+            {uiLanguage?.greeting} {username}
+          </Title>
+          <div style={{ marginBlock: "20px", textAlign: "center" }}>
+            <Title level={4}>{uiLanguage?.userAccount?.title}</Title>
+            <Button
+              size="large"
+              style={{ marginBottom: "10px", width: "25%", minWidth: "220px" }}
+              type="primary"
+              onClick={() => setOpen(true)}
+            >
+              {uiLanguage?.userAccount?.addCollectionBtn}
+            </Button>
+          </div>
+
+          <CollectionsLayout {...{ form, setOpen, setFields }} data={collectionEntities} />
+        </Wrapper>
+      )}
     </ConfigProvider>
   );
 };

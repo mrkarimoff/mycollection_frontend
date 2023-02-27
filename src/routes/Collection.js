@@ -16,6 +16,7 @@ import rus from "antd/locale/ru_RU";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+import Loader from "../components/Loader";
 import MainHeader from "../components/MainHeader";
 import ModalDialog from "../components/ModalDialog";
 import TableComponent from "../components/TableComponent";
@@ -33,14 +34,15 @@ import {
   updateItem,
 } from "../redux/items/items.reducer";
 import {
+  getCanManage,
   getCollectionName,
   getCurrentItem,
   getCustomFields,
   getItemEntities,
+  getItemsLoading,
   getTags,
 } from "../redux/items/items.selectors";
 import { getLanguage, getTheme } from "../redux/users/users.selectors";
-import { getLocalRole, getLocalToken, getLocalUsername } from "../utils/localStorage.service";
 
 const Collection = () => {
   const collectionId = window.location.pathname.split("/").at(-1);
@@ -50,16 +52,15 @@ const Collection = () => {
   const uiLanguage = useSelector(getLanguage());
   const currentItem = useSelector(getCurrentItem());
   const tags = useSelector(getTags());
+  const itemsLoading = useSelector(getItemsLoading());
   const customFields = useSelector(getCustomFields());
   const collectionName = useSelector(getCollectionName());
+  const canManage = useSelector(getCanManage());
   const itemEntities = useSelector(getItemEntities());
   const { Title } = Typography;
   const { defaultAlgorithm, darkAlgorithm } = theme;
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
-  const role = getLocalRole();
-  const token = getLocalToken();
-  const username = getLocalUsername();
   const [form] = Form.useForm();
 
   useEffect(() => {
@@ -73,12 +74,8 @@ const Collection = () => {
   }, [customFields]);
 
   useEffect(() => {
-    if (role && token && username) {
-      dispatch(getCollectionData(collectionId));
-      dispatch(getAllTags());
-    } else {
-      navigate("/");
-    }
+    dispatch(getCollectionData(collectionId));
+    dispatch(getAllTags());
   }, []);
 
   const customColumns = makeCustomColums(
@@ -117,23 +114,25 @@ const Collection = () => {
     },
     ...customColumns,
     {
-      title: uiLanguage?.collectionPage?.tableElements?.actions,
-      dataIndex: "actions",
-      fixed: "right",
-      width: 100,
-      render: (_, record) => (
-        <div>
-          <Button onClick={() => editItem(record)} style={{ margin: "3px" }}>
-            {uiLanguage?.collectionPage?.tableElements?.edBtn}
-          </Button>
-          <Button
-            onClick={() => dispatch(deleteItem({ collectionId, itemId: record.key }))}
-            style={{ margin: "3px" }}
-          >
-            {uiLanguage?.collectionPage?.tableElements?.delBtn}
-          </Button>
-        </div>
-      ),
+      ...(canManage && {
+        title: uiLanguage?.collectionPage?.tableElements?.actions,
+        dataIndex: "actions",
+        fixed: "right",
+        width: 100,
+        render: (_, record) => (
+          <div>
+            <Button onClick={() => editItem(record)} style={{ margin: "3px" }}>
+              {uiLanguage?.collectionPage?.tableElements?.edBtn}
+            </Button>
+            <Button
+              onClick={() => dispatch(deleteItem({ collectionId, itemId: record.key }))}
+              style={{ margin: "3px" }}
+            >
+              {uiLanguage?.collectionPage?.tableElements?.delBtn}
+            </Button>
+          </div>
+        ),
+      }),
     },
   ];
 
@@ -180,143 +179,152 @@ const Collection = () => {
       }}
     >
       <MainHeader />
-      <Wrapper>
-        <ModalDialog
-          onCancel={emptyForm}
-          title={uiLanguage?.collectionPage?.formElements?.modalTitle}
-          {...{ open, setOpen }}
-        >
-          <Form
-            form={form}
-            initialValues={initialItemValues}
-            layout="vertical"
-            onFinish={onFinish}
-            onFinishFailed={onFinishFailed}
-            autoComplete="off"
+      {itemsLoading ? (
+        <Loader />
+      ) : (
+        <Wrapper>
+          <ModalDialog
+            onCancel={emptyForm}
+            title={uiLanguage?.collectionPage?.formElements?.modalTitle}
+            {...{ open, setOpen }}
           >
-            <Form.Item
-              label={uiLanguage?.collectionPage?.formElements?.name?.label}
-              name={"itemName"}
-              rules={[
-                {
-                  required: true,
-                },
-                {
-                  type: "string",
-                  min: 6,
-                },
-              ]}
+            <Form
+              form={form}
+              initialValues={initialItemValues}
+              layout="vertical"
+              onFinish={onFinish}
+              onFinishFailed={onFinishFailed}
+              autoComplete="off"
             >
-              <Input placeholder={uiLanguage?.collectionPage?.formElements?.name?.placeholder} />
-            </Form.Item>
-            <Form.Item
-              label={uiLanguage?.collectionPage?.formElements?.tags?.label}
-              name={"tags"}
-              rules={[
-                {
-                  required: true,
-                },
-              ]}
-            >
-              <Select
-                allowClear
-                mode="tags"
-                style={{
-                  width: "100%",
-                }}
-                placeholder={uiLanguage?.collectionPage?.formElements?.tags?.placeholder}
-                options={tags?.map((tag) => ({ label: tag?.name, value: tag?.name }))}
-              />
-            </Form.Item>
-
-            {customFields?.map((field) =>
-              field?.type === "number" ? (
-                <Form.Item key={field?.field_id} name={field?.name} label={field?.label}>
-                  <InputNumber
-                    type="number"
-                    placeholder={`Enter ${field?.label}`}
-                    style={{ width: "100%" }}
-                  />
-                </Form.Item>
-              ) : field?.type === "checkbox" ? (
-                <Form.Item
-                  key={field?.field_id}
-                  valuePropName="checked"
-                  name={field?.name}
-                  label={field?.label}
-                >
-                  <Checkbox />
-                </Form.Item>
-              ) : field?.type === "textarea" ? (
-                <TextareaMarkdown
-                  form={form}
-                  key={field?.field_id}
-                  label={field?.label}
-                  name={field?.name}
-                  placeholder={`Enter ${field?.label}`}
-                  tab1={uiLanguage?.userAccount?.formElements?.textareaMarkdown?.tab1}
-                  tab2={uiLanguage?.userAccount?.formElements?.textareaMarkdown?.tab2}
-                />
-              ) : (
-                <Form.Item key={field?.field_id} name={field?.name} label={field?.label}>
-                  <Input placeholder={`Enter ${field?.label}`} type={field?.type} />
-                </Form.Item>
-              )
-            )}
-
-            <Form.Item style={{ margin: 0 }}>
-              <Button
-                loading={confirmLoading}
-                style={{ width: "100%" }}
-                type="primary"
-                htmlType="submit"
+              <Form.Item
+                label={uiLanguage?.collectionPage?.formElements?.name?.label}
+                name={"itemName"}
+                rules={[
+                  {
+                    required: true,
+                  },
+                  {
+                    type: "string",
+                    min: 6,
+                  },
+                ]}
               >
-                {uiLanguage?.collectionPage?.formElements?.submitBtn}
-              </Button>
-            </Form.Item>
-          </Form>
-        </ModalDialog>
+                <Input placeholder={uiLanguage?.collectionPage?.formElements?.name?.placeholder} />
+              </Form.Item>
+              <Form.Item
+                label={uiLanguage?.collectionPage?.formElements?.tags?.label}
+                name={"tags"}
+                rules={[
+                  {
+                    required: true,
+                  },
+                ]}
+              >
+                <Select
+                  allowClear
+                  mode="tags"
+                  style={{
+                    width: "100%",
+                  }}
+                  placeholder={uiLanguage?.collectionPage?.formElements?.tags?.placeholder}
+                  options={tags?.map((tag) => ({ label: tag?.name, value: tag?.name }))}
+                />
+              </Form.Item>
 
-        <Title style={{ textAlign: "center", marginBlock: "20px" }} level={2}>
-          {collectionName || uiLanguage?.collectionPage?.title}
-        </Title>
+              {customFields?.map((field) =>
+                field?.type === "number" ? (
+                  <Form.Item key={field?.field_id} name={field?.name} label={field?.label}>
+                    <InputNumber
+                      type="number"
+                      placeholder={`${uiLanguage?.customFieldPlaceholder} ${field?.label}`}
+                      style={{ width: "100%" }}
+                    />
+                  </Form.Item>
+                ) : field?.type === "checkbox" ? (
+                  <Form.Item
+                    key={field?.field_id}
+                    valuePropName="checked"
+                    name={field?.name}
+                    label={field?.label}
+                  >
+                    <Checkbox />
+                  </Form.Item>
+                ) : field?.type === "textarea" ? (
+                  <TextareaMarkdown
+                    form={form}
+                    key={field?.field_id}
+                    label={field?.label}
+                    name={field?.name}
+                    placeholder={`${uiLanguage?.customFieldPlaceholder} ${field?.label}`}
+                    tab1={uiLanguage?.userAccount?.formElements?.textareaMarkdown?.tab1}
+                    tab2={uiLanguage?.userAccount?.formElements?.textareaMarkdown?.tab2}
+                  />
+                ) : (
+                  <Form.Item key={field?.field_id} name={field?.name} label={field?.label}>
+                    <Input
+                      placeholder={`${uiLanguage?.customFieldPlaceholder} ${field?.label}`}
+                      type={field?.type}
+                    />
+                  </Form.Item>
+                )
+              )}
 
-        <Button
-          size="large"
-          style={{ marginBottom: "10px", width: "25%", minWidth: "220px" }}
-          type="primary"
-          onClick={() => {
-            setOpen(true);
-          }}
-        >
-          {uiLanguage?.collectionPage?.addItemBtn}
-        </Button>
+              <Form.Item style={{ margin: 0 }}>
+                <Button
+                  loading={confirmLoading}
+                  style={{ width: "100%" }}
+                  type="primary"
+                  htmlType="submit"
+                >
+                  {uiLanguage?.collectionPage?.formElements?.submitBtn}
+                </Button>
+              </Form.Item>
+            </Form>
+          </ModalDialog>
 
-        <TableComponent
-          pagination={{ pageSize: 5 }}
-          columns={columns}
-          data={itemEntities?.map((item) => ({
-            key: item?._id,
-            itemName: item?.itemName,
-            tags: item?.tags,
-            text1: item?.text1,
-            text2: item?.text2,
-            text3: item?.text3,
-            number1: item?.number1,
-            number2: item?.number2,
-            number3: item?.number3,
-            checkbox1: item?.checkbox1,
-            checkbox2: item?.checkbox2,
-            checkbox3: item?.checkbox3,
-            date1: item?.date1,
-            date2: item?.date2,
-            date3: item?.date3,
-            textarea1: item?.textarea1,
-            textarea2: item?.textarea2,
-            textarea3: item?.textarea3,
-          }))}
-        />
-      </Wrapper>
+          <Title style={{ textAlign: "center", marginBlock: "20px" }} level={2}>
+            {collectionName || uiLanguage?.collectionPage?.title}
+          </Title>
+
+          {canManage && (
+            <Button
+              size="large"
+              style={{ marginBottom: "10px", width: "25%", minWidth: "220px" }}
+              type="primary"
+              onClick={() => {
+                setOpen(true);
+              }}
+            >
+              {uiLanguage?.collectionPage?.addItemBtn}
+            </Button>
+          )}
+
+          <TableComponent
+            pagination={{ pageSize: 5 }}
+            columns={columns}
+            data={itemEntities?.map((item) => ({
+              key: item?._id,
+              itemName: item?.itemName,
+              tags: item?.tags,
+              text1: item?.text1,
+              text2: item?.text2,
+              text3: item?.text3,
+              number1: item?.number1,
+              number2: item?.number2,
+              number3: item?.number3,
+              checkbox1: item?.checkbox1,
+              checkbox2: item?.checkbox2,
+              checkbox3: item?.checkbox3,
+              date1: item?.date1,
+              date2: item?.date2,
+              date3: item?.date3,
+              textarea1: item?.textarea1,
+              textarea2: item?.textarea2,
+              textarea3: item?.textarea3,
+            }))}
+          />
+        </Wrapper>
+      )}
     </ConfigProvider>
   );
 };
