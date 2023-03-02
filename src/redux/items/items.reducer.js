@@ -12,6 +12,10 @@ const initialState = {
   canManage: false,
   singleItemLoading: true,
   singleItemEntities: [],
+  itemLikes: [],
+  commentEntities: [],
+  commentAuthor: "",
+  commentCount: "",
 };
 
 const itemsSlice = createSlice({
@@ -61,10 +65,30 @@ const itemsSlice = createSlice({
     getSingleItem: () => {},
     getSingleItemSuccess: (state, action) => {
       state.singleItemLoading = false;
-      state.singleItemEntities = action.payload;
+      state.singleItemEntities = action.payload.itemEntities;
+      state.itemLikes = action.payload.likes;
     },
     getSingleItemFail: (_, action) => {
       message.error(action.payload);
+    },
+    updateLikes: () => {},
+    updateLikesSuccess: (state, action) => {
+      state.itemLikes = action.payload;
+    },
+    updateLikesFail: (_, action) => {
+      message.error(action.payload);
+    },
+    sendComment: () => {},
+    getComments: () => {},
+    getCommentsSuccess: (state, action) => {
+      state.commentEntities = action.payload.comments;
+      state.commentAuthor = action.payload.userId;
+    },
+    getCommentsFail: (_, action) => {
+      message.error(action.payload);
+    },
+    updateCommentCount: (state, action) => {
+      state.commentCount = action.payload;
     },
   },
 });
@@ -90,6 +114,14 @@ export const {
   getSingleItem,
   getSingleItemSuccess,
   getSingleItemFail,
+  updateLikes,
+  updateLikesSuccess,
+  updateLikesFail,
+  sendComment,
+  getComments,
+  getCommentsSuccess,
+  getCommentsFail,
+  updateCommentCount,
 } = itemsSlice.actions;
 
 export default itemsReducer;

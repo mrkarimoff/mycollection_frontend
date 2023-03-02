@@ -1,27 +1,34 @@
 import axios from "axios";
 import { call, put, takeLatest } from "redux-saga/effects";
+import config from "../../config.json";
+import { getLocalToken } from "../../utils/localStorage.service";
 import {
   createItem,
+  deleteItem,
   getAllTags,
   getAllTagsFail,
   getAllTagsSuccess,
   getCollectionData,
-  getCollectionDataSuccess,
   getCollectionDataFail,
+  getCollectionDataSuccess,
+  getComments,
+  getCommentsFail,
+  getCommentsSuccess,
   getItems,
-  getItemsSuccess,
   getItemsFail,
-  deleteItem,
-  updateItem,
+  getItemsSuccess,
   getRecentItems,
-  getRecentItemsSuccess,
   getRecentItemsFail,
+  getRecentItemsSuccess,
   getSingleItem,
-  getSingleItemSuccess,
   getSingleItemFail,
+  getSingleItemSuccess,
+  sendComment,
+  updateItem,
+  updateLikes,
+  updateLikesFail,
+  updateLikesSuccess,
 } from "../items/items.reducer";
-import config from "../../config.json";
-import { getLocalToken } from "../../utils/localStorage.service";
 
 function* workGetCollectionData({ payload }) {
   try {
@@ -110,6 +117,43 @@ function* workGetSingleItem({ payload }) {
   }
 }
 
+function* workUpdateLikes({ payload }) {
+  try {
+    const response = yield axios.put(config.baseUrl + `/api/items/likes/${payload}`, null, {
+      headers: { Authorization: `Bearer ${getLocalToken()}` },
+    });
+    yield put(updateLikesSuccess(response?.data));
+  } catch (error) {
+    yield put(updateLikesFail(error?.response?.data?.message));
+  }
+}
+
+function* workSendComment({ payload }) {
+  try {
+    yield axios.post(
+      config.baseUrl + `/api/items/comment/${payload.itemId}`,
+      { comment: payload.text },
+      {
+        headers: { Authorization: `Bearer ${getLocalToken()}` },
+      }
+    );
+    yield put(getComments(payload.itemId));
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+function* workGetComments({ payload }) {
+  try {
+    const response = yield axios.get(config.baseUrl + `/api/items/${payload}/comments`, {
+      headers: { Authorization: `Bearer ${getLocalToken()}` },
+    });
+    yield put(getCommentsSuccess(response?.data));
+  } catch (error) {
+    yield put(getCommentsFail(error?.response?.data?.message));
+  }
+}
+
 function* itemsSaga() {
   yield takeLatest(getCollectionData.type, workGetCollectionData);
   yield takeLatest(createItem.type, workCreateItem);
@@ -119,6 +163,9 @@ function* itemsSaga() {
   yield takeLatest(deleteItem.type, workDeleteItem);
   yield takeLatest(updateItem.type, workUpdateItem);
   yield takeLatest(getSingleItem.type, workGetSingleItem);
+  yield takeLatest(updateLikes.type, workUpdateLikes);
+  yield takeLatest(sendComment.type, workSendComment);
+  yield takeLatest(getComments.type, workGetComments);
 }
 
 export default itemsSaga;

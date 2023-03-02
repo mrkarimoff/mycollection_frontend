@@ -1,11 +1,11 @@
 import { EyeInvisibleOutlined, EyeTwoTone, UserOutlined } from "@ant-design/icons";
-import { Button, Card, ConfigProvider, Form, Input, Typography, message, theme } from "antd";
+import { Button, Card, ConfigProvider, Form, Input, Typography, theme } from "antd";
+import eng from "antd/locale/en_US";
+import rus from "antd/locale/ru_RU";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import MainHeader from "../components/MainHeader";
-import eng from "antd/locale/en_US";
-import rus from "antd/locale/ru_RU";
 import { onRegisterStart } from "../redux/users/users.reducer";
 import { getLanguage, getRegisterLoading, getTheme } from "../redux/users/users.selectors";
 
