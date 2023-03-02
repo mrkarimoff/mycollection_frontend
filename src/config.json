@@ -12,6 +12,7 @@
       },
       "msg404": { "msg": "Sorry, the page you visited does not exist", "btn": "Back Home" },
       "greeting": "Welcome",
+      "emailInvalidMsg": "Email is invalid",
       "validateMessages": "eng",
       "authMessages": {
         "loggedIn": "Logged in successfully",
@@ -164,6 +165,7 @@
         "btn": "Домой"
       },
       "greeting": "Добро пожаловать",
+      "emailInvalidMsg": "Электронная почта недействительна",
       "validateMessages": "ru",
       "authMessages": {
         "loggedIn": "Вы успешно вошли в систему",
