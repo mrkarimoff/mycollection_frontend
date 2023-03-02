@@ -1,35 +1,34 @@
 import axios from "axios";
 import { call, put, takeLatest } from "redux-saga/effects";
+import config from "../../config.json";
+import { getLocalToken } from "../../utils/localStorage.service";
 import {
   createItem,
+  deleteItem,
   getAllTags,
   getAllTagsFail,
   getAllTagsSuccess,
   getCollectionData,
-  getCollectionDataSuccess,
   getCollectionDataFail,
-  getItems,
-  getItemsSuccess,
-  getItemsFail,
-  deleteItem,
-  updateItem,
-  getRecentItems,
-  getRecentItemsSuccess,
-  getRecentItemsFail,
-  getSingleItem,
-  getSingleItemSuccess,
-  getSingleItemFail,
-  updateLikes,
-  updateLikesSuccess,
-  updateLikesFail,
-  sendComment,
+  getCollectionDataSuccess,
   getComments,
-  getCommentsSuccess,
   getCommentsFail,
-  deleteComment,
+  getCommentsSuccess,
+  getItems,
+  getItemsFail,
+  getItemsSuccess,
+  getRecentItems,
+  getRecentItemsFail,
+  getRecentItemsSuccess,
+  getSingleItem,
+  getSingleItemFail,
+  getSingleItemSuccess,
+  sendComment,
+  updateItem,
+  updateLikes,
+  updateLikesFail,
+  updateLikesSuccess,
 } from "../items/items.reducer";
-import config from "../../config.json";
-import { getLocalToken } from "../../utils/localStorage.service";
 
 function* workGetCollectionData({ payload }) {
   try {
@@ -138,7 +137,7 @@ function* workSendComment({ payload }) {
         headers: { Authorization: `Bearer ${getLocalToken()}` },
       }
     );
-    // yield put(getComments(payload.itemId));
+    yield put(getComments(payload.itemId));
   } catch (error) {
     console.log(error);
   }
@@ -155,20 +154,6 @@ function* workGetComments({ payload }) {
   }
 }
 
-function* workDeleteComment({ payload }) {
-  try {
-    yield axios.delete(
-      config.baseUrl + `/api/items/${payload.itemId}/comments/${payload.commentId}`,
-      {
-        headers: { Authorization: `Bearer ${getLocalToken()}` },
-      }
-    );
-    // yield put(getComments(payload.itemId));
-  } catch (error) {
-    console.log(error);
-  }
-}
-
 function* itemsSaga() {
   yield takeLatest(getCollectionData.type, workGetCollectionData);
   yield takeLatest(createItem.type, workCreateItem);
@@ -181,7 +166,6 @@ function* itemsSaga() {
   yield takeLatest(updateLikes.type, workUpdateLikes);
   yield takeLatest(sendComment.type, workSendComment);
   yield takeLatest(getComments.type, workGetComments);
-  yield takeLatest(deleteComment.type, workDeleteComment);
 }
 
 export default itemsSaga;

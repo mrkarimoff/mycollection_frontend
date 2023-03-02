@@ -1,5 +1,5 @@
 {
-  "baseUrl": "http://localhost:4000",
+  "baseUrl": "https://mycollectionbackend-production.up.railway.app",
   "socketServerUrl": "ws://localhost:8080",
   "UILanguage": {
     "eng": {

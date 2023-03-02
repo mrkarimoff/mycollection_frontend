@@ -87,7 +87,6 @@ const itemsSlice = createSlice({
     getCommentsFail: (_, action) => {
       message.error(action.payload);
     },
-    deleteComment: () => {},
     updateCommentCount: (state, action) => {
       state.commentCount = action.payload;
     },
@@ -122,7 +121,6 @@ export const {
   getComments,
   getCommentsSuccess,
   getCommentsFail,
-  deleteComment,
   updateCommentCount,
 } = itemsSlice.actions;
 
