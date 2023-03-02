@@ -1,11 +1,22 @@
 {
   "baseUrl": "http://localhost:4000",
+  "socketServerUrl": "ws://localhost:8080",
   "UILanguage": {
     "eng": {
+      "commentSection": {
+        "timeLang": "eng",
+        "title": "Comments",
+        "validationMsg": "Comment is required !",
+        "placeholder": "Leave a comment...",
+        "noComment": "No comments"
+      },
       "msg404": { "msg": "Sorry, the page you visited does not exist", "btn": "Back Home" },
       "greeting": "Welcome",
       "validateMessages": "eng",
-      "authMessages": { "loggedIn": "Logged in successfully" },
+      "authMessages": {
+        "loggedIn": "Logged in successfully",
+        "warning": "Please log in to your account first"
+      },
       "customFieldPlaceholder": "Enter",
       "searchPage": {
         "foundCols": "Found Collections",
@@ -141,13 +152,23 @@
     },
 
     "rus": {
+      "commentSection": {
+        "timeLang": "ru",
+        "title": "Комментарии",
+        "validationMsg": "Комментарий обязателен!",
+        "placeholder": "Оставить комментарий...",
+        "noComment": "Нет Комментариев"
+      },
       "msg404": {
         "msg": "Извините, страница, которую вы посетили, не существует",
         "btn": "Домой"
       },
       "greeting": "Добро пожаловать",
       "validateMessages": "ru",
-      "authMessages": { "loggedIn": "Вы успешно вошли в систему" },
+      "authMessages": {
+        "loggedIn": "Вы успешно вошли в систему",
+        "warning": "Пожалуйста сначала, войдите в свой аккаунт"
+      },
       "customFieldPlaceholder": "Введите",
       "searchPage": {
         "foundCols": "Найденные коллекции",
