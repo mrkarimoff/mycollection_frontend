@@ -1,6 +1,6 @@
 {
   "baseUrl": "https://mycollectionbackend-production.up.railway.app",
-  "socketServerUrl": "ws://localhost:8080",
+  "socketServerUrl": "https://soketservermycollection-production.up.railway.app",
   "UILanguage": {
     "eng": {
       "commentSection": {
