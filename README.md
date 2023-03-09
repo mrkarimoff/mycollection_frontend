@@ -11,6 +11,7 @@
 #### This app has been built by the following technologies:
 
 - MongoDB, Express.js, React.js, Node.js
+- Socket.io for instant comments, Atlas Search
 - Redux+Saga+Toolkit, Axios (for API integration)
 - Ant Design UI, CSS, React-Markdown
 - Firebase Cloud Storage service
